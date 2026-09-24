@@ -1,0 +1,9 @@
+.idea
+domain/.dart_tool
+di/.dart_tool
+data/.dart_tool
+presentation/.dart_tool
+presentation/.idea
+presentation/build
+
+

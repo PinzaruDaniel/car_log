@@ -1,0 +1,11 @@
+assets_generator_kit:
+  input:
+    - assets/images
+    - assets/icons
+
+  output: lib/generated/assets.dart
+
+  integrations:
+    svg: true
+    lottie: false
+   

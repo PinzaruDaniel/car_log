@@ -1,0 +1,26 @@
+clean_architect:
+  config_version: 1
+  structure: layered_packages # layered_packages, feature_first, or vertical_packages
+  data_layout: source_first # source_first or type_first
+  state_management: getx # getx, bloc, provider, or none
+  network: dio # dio or abstract
+  local_storage: objectbox # secure_storage, shared_preferences, hive, objectbox, or abstract
+  dependency_injection: injectable # manual or injectable
+  use_asset_generator: true
+  use_either_failure: true
+  flutter:
+    create_presentation: true
+    platforms:
+      - android
+      - ios
+  models:
+    use_freezed: true
+    use_json_serializable: true
+  paths:
+    domain: domain/lib
+    data: data/lib/features
+    presentation: presentation/lib
+    di: di/lib
+    app: app/lib
+    core: packages/core/lib
+    features: packages/features
