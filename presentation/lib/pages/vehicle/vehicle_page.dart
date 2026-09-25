@@ -1,5 +1,11 @@
+import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wallet_card/core/wallet_platform.dart';
+import 'package:flutter_wallet_card/flutter_wallet_card.dart';
+import 'package:flutter_wallet_card/models/wallet_card.dart';
 import 'package:get/get.dart';
+import 'package:presentation/constants/app_constants.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../controllers/vehicle_controller.dart';
 
@@ -20,13 +26,57 @@ class _VehiclePageState extends State<VehiclePage> {
     controller = Get.find<VehicleController>();
     controller.load();
   }
-
+  void _showSnackBar(BuildContext context, String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
         if (controller.items.isEmpty) {
-          return const Center(child: Text('Vehicle'));
+          return Center(
+            child: AddToGoogleWalletButton(pass: _examplePass,
+              onSuccess: () => _showSnackBar(context, 'Success!'),
+              onCanceled: () => _showSnackBar(context, 'Action canceled.'),
+              onError: (Object error) {
+              print('onError: ${error.toString()}');
+                _showSnackBar(context, error.toString());
+              },)/*TextButton(
+              onPressed: () async {
+                var card = WalletCard(
+                  id: '${AppConstants.issuerId}.$_passId',
+                  type: WalletCardType.generic,
+                  platformData: {
+                    'issuerId': '3388000000023193615',
+                    'classId': '${AppConstants.issuerId}.car_card',
+                  },
+                  metadata: WalletCardMetadata(
+                    title: 'My Awesome Card',
+                    description: 'This is a sample wallet card',
+                    organizationName: 'Your Company',
+                    serialNumber: 'CARD123',
+                  ),
+                );
+                bool isAvailable = await FlutterWalletCard.isWalletAvailable;
+                if (!isAvailable) {
+                  return;
+                }
+                try {
+                  await FlutterWalletCard.addToWallet(card);
+                } on WalletException catch (e) {
+                  print('Wallet error: ${e.message}');
+                  _showSnackBar(context, 'Wallet error: ${e.message}');
+                  if (e.originalError != null) {
+                    _showSnackBar(context, 'Original error: ${e.originalError.toString()}');
+                    print('Original error: ${e.originalError}');
+                  }
+                } catch (e) {
+                  _showSnackBar(context, 'General error: $e');
+                  print('General error: $e');
+                }
+              },
+              child: const Text('Add in wallet '),
+            ),*/
+          );
         }
         return ListView.builder(
           itemCount: controller.items.length,
@@ -37,13 +87,11 @@ class _VehiclePageState extends State<VehiclePage> {
       }),
     );
   }
+
 }
 
 class VehicleViewItem extends StatelessWidget {
-  const VehicleViewItem({
-    required this.id,
-    super.key,
-  });
+  const VehicleViewItem({required this.id, super.key});
 
   final String id;
 
@@ -52,4 +100,63 @@ class VehicleViewItem extends StatelessWidget {
     return ListTile(title: Text(id));
   }
 }
+final String _passId = const Uuid().v4();
 
+final String _examplePass = """ 
+    {
+      "iss": "google-wallet-backend@carlog-509705.iam.gserviceaccount.com",
+      "aud": "google",
+      "typ": "savetowallet",
+      "origins": [],
+      "payload": {
+        "genericObjects": [
+          {
+            "id": "${AppConstants.issuerId}.$_passId",
+            "classId": "${AppConstants.issuerId}.car_card",
+            "genericType": "GENERIC_TYPE_UNSPECIFIED",
+            "state": "ACTIVE",
+            "hexBackgroundColor": "#4285f4",
+            "logo": {
+              "sourceUri": {
+                "uri": "https://storage.googleapis.com/wallet-lab-tools-codelab-artifacts-public/pass_google_logo.jpg"
+              }
+            },
+            "cardTitle": {
+              "defaultValue": {
+                "language": "en",
+                "value": "Google I/O '22 [DEMO ONLY]"
+              }
+            },
+            "subheader": {
+              "defaultValue": {
+                "language": "en",
+                "value": "Attendee"
+              }
+            },
+            "header": {
+              "defaultValue": {
+                "language": "en",
+                "value": "Alex McJacobs"
+              }
+            },
+            "barcode": {
+              "type": "QR_CODE",
+              "value": "$_passId"
+            },
+            "heroImage": {
+              "sourceUri": {
+                "uri": "https://storage.googleapis.com/wallet-lab-tools-codelab-artifacts-public/google-io-hero-demo-only.jpg"
+              }
+            },
+            "textModulesData": [
+              {
+                "header": "POINTS",
+                "body": "1234",
+                "id": "points"
+              }
+            ]
+          }
+        ]
+      }
+    }
+""";

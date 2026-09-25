@@ -19,7 +19,9 @@ dependencies:
   get: ^4.7.3
   flutter_liquid_glass_kit: ^1.5.0
   smart_form_fields: ^2.0.0
-
+  flutter_wallet_card: ^5.0.0
+  uuid: ^4.6.0
+  add_to_google_wallet: ^0.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

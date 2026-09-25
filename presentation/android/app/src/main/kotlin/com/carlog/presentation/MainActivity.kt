@@ -1,4 +1,4 @@
-package com.example.presentation
+package com.app.carlog
 
 import io.flutter.embedding.android.FlutterActivity
 
