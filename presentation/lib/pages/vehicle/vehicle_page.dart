@@ -48,6 +48,10 @@ class _VehiclePageState extends State<VehiclePage> {
                   platformData: {
                     'issuerId': '3388000000023193615',
                     'classId': '${AppConstants.issuerId}.car_card',
+                    "iss": "google-wallet-backend@carlog-509705.iam.gserviceaccount.com",
+                    "aud": "google",
+                    "typ": "savetowallet",
+                    "iat": '$_issuedAt',
                   },
                   metadata: WalletCardMetadata(
                     title: 'My Awesome Card',
@@ -102,25 +106,24 @@ class VehicleViewItem extends StatelessWidget {
 }
 final String _passId = const Uuid().v4();
 
-final String _examplePass = """ 
-    {
-      "iss": "google-wallet-backend@carlog-509705.iam.gserviceaccount.com",
-      "aud": "google",
-      "typ": "savetowallet",
-      "origins": [],
-      "payload": {
-        "genericObjects": [
+final int _issuedAt =
+    DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+final String _examplePass = """
+{
+  "iss": "google-wallet-backend@carlog-509705.iam.gserviceaccount.com",
+  "aud": "google",
+  "typ": "savetowallet",
+  "iat": $_issuedAt,
+  "origins": [],
+  "payload": {
+    "genericObjects": [
           {
             "id": "${AppConstants.issuerId}.$_passId",
-            "classId": "${AppConstants.issuerId}.car_card",
-            "genericType": "GENERIC_TYPE_UNSPECIFIED",
-            "state": "ACTIVE",
+      "classId": "${AppConstants.issuerId}.car_card",
+      "state": "ACTIVE",
             "hexBackgroundColor": "#4285f4",
-            "logo": {
-              "sourceUri": {
-                "uri": "https://storage.googleapis.com/wallet-lab-tools-codelab-artifacts-public/pass_google_logo.jpg"
-              }
-            },
+            
             "cardTitle": {
               "defaultValue": {
                 "language": "en",
@@ -143,11 +146,6 @@ final String _examplePass = """
               "type": "QR_CODE",
               "value": "$_passId"
             },
-            "heroImage": {
-              "sourceUri": {
-                "uri": "https://storage.googleapis.com/wallet-lab-tools-codelab-artifacts-public/google-io-hero-demo-only.jpg"
-              }
-            },
             "textModulesData": [
               {
                 "header": "POINTS",
@@ -157,6 +155,5 @@ final String _examplePass = """
             ]
           }
         ]
-      }
-    }
-""";
+  }
+} """;
