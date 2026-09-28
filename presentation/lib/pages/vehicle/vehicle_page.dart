@@ -127,19 +127,19 @@ final String _examplePass = """
             "cardTitle": {
               "defaultValue": {
                 "language": "en",
-                "value": "Google I/O '22 [DEMO ONLY]"
+                "value": "My personal card [DEMO ONLY]"
               }
             },
             "subheader": {
               "defaultValue": {
                 "language": "en",
-                "value": "Attendee"
+                "value": "You are just better"
               }
             },
             "header": {
               "defaultValue": {
                 "language": "en",
-                "value": "Alex McJacobs"
+                "value": "OOOOOOO Satalana"
               }
             },
             "barcode": {
@@ -149,7 +149,7 @@ final String _examplePass = """
             "textModulesData": [
               {
                 "header": "POINTS",
-                "body": "1234",
+                "body": "67 69",
                 "id": "points"
               }
             ]

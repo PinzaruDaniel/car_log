@@ -10,6 +10,10 @@ recommended production backend, and the basic path for Apple Wallet on iOS.
 > source control, an APK, or an IPA. Mobile application bundles can be read by
 > users. Signing credentials belong on a backend or secure CI system.
 
+> [!NOTE]
+> Screenshots in this guide are cropped and redact account, project, issuer,
+> package, and signing identifiers. Use values from your own environments.
+
 ## Architecture
 
 Current Android testing can use an unsigned Wallet JWT. Google Play services
@@ -74,9 +78,16 @@ New issuers start in Demo Mode. Only Admin users, Developer users, and listed
 test accounts can save Demo Mode passes. Public issuance requires publishing
 approval.
 
-> **Screenshot placeholder — Wallet issuer dashboard**
->
-> Add screenshot showing issuer name, issuer ID, and Demo/Publishing status.
+![Google Wallet Console showing Demo Mode and publishing-access requirements](screenshots/wallet_dashboard.png)
+
+*Google Wallet issuer dashboard. Demo Mode permits testing before publishing
+access is approved.*
+
+Verify that:
+
+- Issuer account exists.
+- Demo Mode status is visible.
+- Business Profile and publishing access are completed before production.
 
 ### 3. Enable the Google Wallet API
 
@@ -86,33 +97,43 @@ In the matching Google Cloud project:
 2. Find **Google Wallet API**.
 3. Enable it.
 
-An OAuth 2.0 client ID is not required for this integration. Android SDK
-requests use the app package and signing certificate. Backend REST requests use
-a service account.
+OAuth 2.0 client credentials are not required for this Android SDK integration.
+Android SDK requests use the app package and signing certificate. Backend REST
+requests use a service account.
 
-> **Screenshot placeholder — Google Wallet API enabled**
->
-> Add screenshot from Google Cloud APIs & Services.
+![Google Cloud Console showing Google Wallet API enabled](screenshots/wallet_api_enabled.png)
+
+*Google Wallet API enabled in the Google Cloud project used by the issuer.*
 
 ### 4. Create and authorize a service account
 
 A service account is needed for backend REST operations and signed JWTs.
 
+Create the account in Google Cloud:
+
 1. In Google Cloud, open **IAM & Admin → Service Accounts**.
 2. Create a dedicated Google Wallet service account.
 3. Copy its `client_email`.
-4. In Google Pay & Wallet Console, open **Users**.
-5. Invite the service-account email.
-6. Assign **Developer** access.
+
+![Google Cloud Console showing the Wallet service account](screenshots/wallet_users.png)
+
+*This confirms service-account creation in Google Cloud only. It does not prove
+that the account has Google Wallet Developer access.*
+
+Authorize the account in Google Pay & Wallet Console:
+
+1. Open **Users**.
+2. Invite the service-account email.
+3. Assign **Developer** access.
 
 For backend development, create a service-account key only if workload identity
 or another keyless mechanism is unavailable. Store the key outside the repo.
 Revoke exposed keys immediately.
 
-> **Screenshot placeholder — Wallet users**
+> **Screenshot needed — Google Wallet Console user permissions**
 >
-> Add screenshot showing the service account with Developer access. Redact
-> unrelated personal data if the document will be shared publicly.
+> Add screenshot showing the service-account email with **Developer** access
+> under Google Pay & Wallet Console → Users.
 
 ### 5. Create a Generic pass class
 
@@ -133,9 +154,9 @@ ISSUER_ID.car_card
 Do not send only `car_card` or `GenericClass` as `classId`. Google requires the
 numeric issuer prefix.
 
-> **Screenshot placeholder — Generic classes**
->
-> Add screenshot showing the `car_card` class, type Generic, status Active.
+![Google Wallet Console showing the active car_card Generic class](screenshots/generic_classes.png)
+
+*Configured class: `car_card` — Generic — Active.*
 
 ### 6. Authorize the Android application
 
@@ -145,6 +166,11 @@ Find signing fingerprints:
 cd presentation/android
 ./gradlew signingReport
 ```
+
+![Gradle signingReport output with signing identifiers redacted](screenshots/terminal_sha1.png)
+
+*`signingReport` provides the SHA-1 fingerprint for the certificate that signed
+the locally installed build.*
 
 In Google Pay & Wallet Console:
 
@@ -162,9 +188,11 @@ Register every applicable certificate separately:
 The SHA-1 must belong to the certificate that signed the APK installed on the
 device. Registering the debug SHA-1 does not authorize a Play Store build.
 
-> **Screenshot placeholder — App Permissions**
->
-> Add screenshot showing package name and SHA-1 fingerprint.
+![Google Wallet App Permissions with package and fingerprint redacted](screenshots/app_permissions_sha1.png)
+
+*Wallet Console must contain the package name and SHA-1 matching the installed
+application. Production builds distributed through Google Play require the
+Google Play App Signing SHA-1, not only the debug or upload-key SHA-1.*
 
 ### 7. Configure Demo Mode test accounts
 
@@ -177,9 +205,11 @@ Under **Google Wallet API → Test accounts**:
 Admins and Developers can already test. A service account does not need to be a
 test-device account because it cannot sign in to the Wallet application.
 
-> **Screenshot placeholder — Test accounts**
->
-> Add screenshot showing saved tester accounts.
+![Google Wallet Demo Mode test-account configuration](screenshots/test_users.png)
+
+*Add the Google Account used by Google Wallet on the physical test device. A
+service-account email is not a device tester because a service account cannot
+sign in to Google Wallet.*
 
 ### 8. Build an unsigned Wallet JWT for Android testing
 
@@ -422,23 +452,30 @@ PassKit integration.
 
 ### Apple Developer setup
 
-1. Join the Apple Developer Program.
+An ordinary Apple Account used for iCloud is not sufficient to create Pass Type
+ID certificates. The issuer must join the paid Apple Developer Program.
+
+1. Join the paid Apple Developer Program as an individual or organization.
 2. Create a **Pass Type ID**, for example `pass.com.example.carlog`.
 3. Create a Pass Type ID certificate.
 4. Export certificate and private key for secure backend use.
 5. Download the current Apple Worldwide Developer Relations certificate when
    required by the signing toolchain.
-6. In Xcode, enable the **Wallet** capability for the Runner target.
-7. Configure appropriate pass-type entitlements when the app needs to access
-   its own passes.
+6. If the app reads or manages installed passes, enable the **Wallet**
+   capability for the Runner target and configure the required Pass Type IDs.
 
-> **Screenshot placeholder — Apple Pass Type ID**
+> **Screenshot needed — Apple Developer Pass Type ID**
 >
 > Add screenshot from Certificates, Identifiers & Profiles.
 
-> **Screenshot placeholder — Xcode Wallet capability**
+> **Screenshot needed — Apple Pass Type ID certificate**
 >
-> Add screenshot showing Runner → Signing & Capabilities → Wallet.
+> Add screenshot showing the certificate associated with the Pass Type ID.
+
+> **Screenshot needed — Xcode Wallet capability**
+>
+> If the app reads or manages installed passes, add a screenshot showing
+> Runner → Signing & Capabilities → Wallet.
 
 ### `.pkpass` structure
 
@@ -479,6 +516,11 @@ let controller = PKAddPassesViewController(pass: pass)
 present(controller, animated: true)
 ```
 
+Presenting `PKAddPassesViewController` lets the user explicitly review and add
+the pass. This add-only flow does not require pass-library entitlement. Wallet
+capability and pass-type entitlements are required when the app reads or
+manages installed passes.
+
 Choose a maintained Flutter PassKit package or implement a small MethodChannel
 wrapper. Required plugin behavior:
 
@@ -487,6 +529,11 @@ wrapper. Required plugin behavior:
 - Present `PKAddPassesViewController`.
 - Return success, cancellation, or validation error.
 - Optionally query whether a matching pass already exists.
+
+> **Screenshot needed — Apple Wallet add-pass preview**
+>
+> Add screenshot from a physical iPhone showing the signed pass preview before
+> the user confirms **Add**.
 
 ### Apple Wallet updates
 
@@ -500,7 +547,8 @@ This is separate from normal application push notifications.
 - Pass Type ID created.
 - Valid Pass Type certificate available on backend.
 - Certificate expiration monitored.
-- Wallet capability and entitlements configured.
+- Wallet capability and entitlements configured when pass-library access is
+  required.
 - `.pkpass` validates on a physical iPhone.
 - Correct MIME type returned.
 - Pass artwork follows Apple requirements.
@@ -562,4 +610,3 @@ lacks the required wrapper (`iss`, `aud`, `typ`, `iat`, `origins`, and
 - [Google Wallet Generic Object reference](https://developers.google.com/wallet/reference/rest/v1/genericobject)
 - [Apple: Building a pass](https://developer.apple.com/documentation/walletpasses/building-a-pass)
 - [Apple: PKAddPassesViewController](https://developer.apple.com/documentation/passkit/pkaddpassesviewcontroller)
-
