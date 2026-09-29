@@ -312,6 +312,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_wallet_kit:
+    dependency: "direct main"
+    description:
+      name: flutter_wallet_kit
+      sha256: "37fff35e54e3eaf6513fd0e9537acb716c48c064b679e35cf6618b01713b072c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   freezed_annotation:
     dependency: transitive
     description:

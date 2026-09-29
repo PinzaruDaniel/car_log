@@ -1,8 +1,10 @@
 # Wallet Pass Integration Guide
 
-This guide describes the current Android integration using
+This guide describes the existing Android integration using
 [`add_to_google_wallet`](https://pub.dev/packages/add_to_google_wallet), the
-recommended production backend, and the basic path for Apple Wallet on iOS.
+unified Android/iOS option provided by
+[`flutter_wallet_kit`](https://pub.dev/packages/flutter_wallet_kit), the
+recommended production backend, and Apple Wallet integration.
 
 > [!WARNING]
 > Never include a Google service-account JSON key, Apple pass-signing private
@@ -39,6 +41,50 @@ Platform wallet UI
 The backend approach protects credentials, validates business data, produces
 stable object identifiers, and supports later pass updates.
 
+## Unified Flutter package
+
+New cross-platform integrations can use `flutter_wallet_kit`:
+
+```yaml
+dependencies:
+  flutter_wallet_kit: ^0.0.1
+```
+
+```dart
+import 'package:flutter_wallet_kit/flutter_wallet_kit.dart';
+```
+
+The package supports Android API 24+ and iOS 15+. It provides one API for:
+
+- Google Wallet unsigned metadata through `PayClient.savePasses`.
+- Backend-signed Google Wallet JWTs through `PayClient.savePassesJwt`.
+- Signed Apple `.pkpass` bytes through `PKAddPassesViewController`.
+- Wallet availability checks, typed results, and native platform buttons.
+
+Shared application code can provide both platform values. Native code uses only
+the value for the current platform:
+
+```dart
+const wallet = FlutterWalletKit();
+
+final supported = await wallet.isWalletSupported();
+if (!supported) return;
+
+final result = await wallet.addPass(
+  iosPassData: pkpassBytes,
+  androidJwt: signedGoogleWalletJwt,
+);
+
+if (result == WalletResult.success) {
+  // Pass added successfully.
+}
+```
+
+For Android metadata mode, provide `androidPassJson` instead of `androidJwt`, or
+use `wallet.addGoogleWalletPass(pass)`. Never provide both Android values in one
+call. Apple still requires fully generated and signed `.pkpass` bytes. Google
+signed-JWT mode still requires backend signing.
+
 ## Android: Google Wallet
 
 ### 1. Add Flutter dependency
@@ -64,7 +110,8 @@ import 'package:add_to_google_wallet/widgets/add_to_google_wallet_button.dart';
 ```
 
 This package supports Android only. It calls the native Google Wallet Android
-SDK and displays a localized Add to Google Wallet button.
+SDK and displays a localized Add to Google Wallet button. Developers wanting
+one Android/iOS API can use `flutter_wallet_kit` from the previous section.
 
 ### 2. Create a Google Wallet issuer account
 
@@ -388,7 +435,9 @@ Content-Disposition: attachment; filename="vehicle-123.pkpass"
 
 For signed JWT delivery, the current `add_to_google_wallet` widget is not enough
 by itself because its public API accepts unsigned JSON and calls `savePasses`.
-Use a plugin exposing `savePassesJwt`, or add a small native platform channel.
+Use `flutter_wallet_kit`, which exposes
+`wallet.addPass(androidJwt: signedGoogleWalletJwt)`, or add a small native
+platform channel around `savePassesJwt`.
 
 JWT outline:
 
@@ -507,8 +556,21 @@ Signing must not happen inside the Flutter application.
 
 ### Flutter/iOS save flow
 
-Flutter should download the authenticated `.pkpass`, store it temporarily, and
-invoke an iOS PassKit plugin. Native iOS behavior is based on:
+Flutter should download the authenticated `.pkpass` bytes and pass them to
+`flutter_wallet_kit`:
+
+```dart
+import 'package:flutter_wallet_kit/flutter_wallet_kit.dart';
+
+const wallet = FlutterWalletKit();
+
+final result = await wallet.addPass(iosPassData: pkpassBytes);
+if (result == WalletResult.success) {
+  // Pass added successfully.
+}
+```
+
+The package presents Apple's native PassKit flow, equivalent to:
 
 ```swift
 let pass = try PKPass(data: passData)
@@ -521,8 +583,7 @@ the pass. This add-only flow does not require pass-library entitlement. Wallet
 capability and pass-type entitlements are required when the app reads or
 manages installed passes.
 
-Choose a maintained Flutter PassKit package or implement a small MethodChannel
-wrapper. Required plugin behavior:
+Required integration behavior:
 
 - Accept pass bytes or local `.pkpass` path.
 - Construct `PKPass`.
@@ -603,6 +664,7 @@ lacks the required wrapper (`iss`, `aud`, `typ`, `iat`, `origins`, and
 ## References
 
 - [add_to_google_wallet package](https://pub.dev/packages/add_to_google_wallet)
+- [flutter_wallet_kit package](https://pub.dev/packages/flutter_wallet_kit)
 - [Google Wallet issuer onboarding](https://developers.google.com/wallet/generic/getting-started/issuer-onboarding)
 - [Authorize an Android app](https://developers.google.com/wallet/generic/getting-started/auth/android)
 - [Google Wallet JWT structure](https://developers.google.com/wallet/generic/use-cases/jwt)
