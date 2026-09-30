@@ -36,4 +36,50 @@ class AppColors {
       side: const BorderSide(color: AppColors.borderStroke, width: 1),
     ),
   ),
-);
+   inputDecorationTheme: InputDecorationTheme(
+     filled: true,
+     fillColor: AppColors.inputSurface,
+
+     border: OutlineInputBorder(
+       borderRadius: BorderRadius.circular(12),
+     ),
+
+     enabledBorder: OutlineInputBorder(
+       borderRadius: BorderRadius.circular(12),
+       borderSide: const BorderSide(
+         color: AppColors.borderStroke,
+         width: 1,
+       ),
+     ),
+
+     focusedBorder: OutlineInputBorder(
+       borderRadius: BorderRadius.circular(12),
+       borderSide: const BorderSide(
+         color: AppColors.primaryAmber,
+         width: 2,
+       ),
+     ),
+
+     errorBorder: OutlineInputBorder(
+       borderRadius: BorderRadius.circular(12),
+       borderSide: const BorderSide(
+         color: AppColors.statusDanger,
+         width: 1,
+       ),
+     ),
+
+     focusedErrorBorder: OutlineInputBorder(
+       borderRadius: BorderRadius.circular(12),
+       borderSide: const BorderSide(
+         color: AppColors.statusDanger,
+         width: 2,
+       ),
+     ),
+
+    /* contentPadding: const EdgeInsets.symmetric(
+       horizontal: 16,
+       vertical: 14,
+     ),*/
+   ),
+
+ );

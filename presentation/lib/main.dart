@@ -1,8 +1,8 @@
 import 'package:di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:presentation/pages/main_page.dart';
-import 'package:presentation/utils/app_colors.dart';
+import 'package:car_log/pages/main_page.dart';
+import 'package:car_log/utils/app_colors.dart';
 import 'package:smart_form_fields/smart_form_fields.dart';
 
 Future<void> main() async {

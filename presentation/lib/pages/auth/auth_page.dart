@@ -12,7 +12,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  late final AuthController controller;
+  AuthController get controller => Get.find<AuthController>();
 
   SmartFormController get formController => SmartFormController();
 
@@ -20,7 +20,13 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
     Get.put(AuthController());
-    controller = Get.find<AuthController>();
+  }
+
+  void toggle() {
+    controller.useVinCode.value = !controller.useVinCode.value;
+    if (!controller.useVinCode.value) {
+      controller.initViewItems();
+    }
   }
 
   @override
@@ -29,17 +35,30 @@ class _AuthPageState extends State<AuthPage> {
       appBar: AppBar(title: const Text('Auth')),
       body: Column(
         children: [
-          SmartForm(
-            controller: formController,
-            children: [
-              SmartTextField(
-                item: SmartTextFieldViewItem(
-                  name: 'Vin',
-                  validators: <SmartValidator>[SmartValidators.length(17, message: 'Vin must be 17 characters long')],
+          Obx(() {
+            return SmartForm(
+              controller: formController,
+              children: [
+                SmartFormField(
+                  builder: (context, field) {
+                    return SwitchListTile(value: controller.useVinCode.value, onChanged: (_) => toggle.call());
+                  },
                 ),
-              ),
-            ],
-          ),
+                controller.useVinCode.value
+                    ? SmartTextField(
+                        item: SmartTextFieldViewItem(
+                          name: 'vin',
+                          validators: <SmartValidator>[
+                            SmartValidators.length(17, message: 'Vin must be 17 characters long'),
+                          ],
+                        ),
+                      )
+                    : Column(
+                        children: controller.formFieldViewItems.map((item) => SmartTextField(item: item)).toList(),
+                      ),
+              ],
+            );
+          }),
         ],
       ) /*Obx(() {
         if (controller.items.isEmpty) {

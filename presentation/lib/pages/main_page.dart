@@ -1,7 +1,8 @@
+import 'vehicle/vehicle_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_liquid_glass_kit/flutter_liquid_glass_kit.dart';
-import 'package:presentation/pages/auth/auth_page.dart';
-import 'package:presentation/pages/vehicle/vehicle_page.dart';
+
+import 'auth/auth_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

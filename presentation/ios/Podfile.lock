@@ -1,28 +1,38 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_wallet_card (1.0.0):
+    - Flutter
+    - OpenSSL-Universal
   - ObjectBox (5.3.0)
   - objectbox_flutter_libs (0.0.1):
     - Flutter
     - ObjectBox (= 5.3.0)
+  - OpenSSL-Universal (3.6.2000)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_wallet_card (from `.symlinks/plugins/flutter_wallet_card/ios`)
   - objectbox_flutter_libs (from `.symlinks/plugins/objectbox_flutter_libs/ios`)
 
 SPEC REPOS:
   trunk:
     - ObjectBox
+    - OpenSSL-Universal
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_wallet_card:
+    :path: ".symlinks/plugins/flutter_wallet_card/ios"
   objectbox_flutter_libs:
     :path: ".symlinks/plugins/objectbox_flutter_libs/ios"
 
 SPEC CHECKSUMS:
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+  flutter_wallet_card: fa464b6f36c9c7ffda50f48b659b2b056d2eeaa8
   ObjectBox: 2aae8ad350012cb53c6e7848064307cf68617f73
   objectbox_flutter_libs: 42b57158b8c4869b731487f220e07d6edc6616e0
+  OpenSSL-Universal: ecee7b138fa75a74ecf00d7ffd248fb584739b9e
 
 PODFILE CHECKSUM: 3ba3a73b1b12adcf321a227a745625fe0888cc82
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wallet_kit/flutter_wallet_kit.dart';
 import 'package:get/get.dart';
-import 'package:presentation/constants/app_constants.dart';
+import 'package:car_log/constants/app_constants.dart';
+import 'package:car_log/widgets/apple_wallet_button.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../controllers/vehicle_controller.dart';
@@ -55,11 +56,18 @@ class _VehiclePageState extends State<VehiclePage> {
       body: Obx(() {
         if (controller.items.isEmpty) {
           return Center(
-            child: AddToGoogleWalletButton(
-              pass: googlePass,
-              onSuccess: () => _showSnackBar(context, 'Success!'),
-              onCanceled: () => _showSnackBar(context, 'Action canceled.'),
-              onError: (error) => _showSnackBar(context, error.toString()),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AddToGoogleWalletButton(
+                  pass: googlePass,
+                  onSuccess: () => _showSnackBar(context, 'Success!'),
+                  onCanceled: () => _showSnackBar(context, 'Action canceled.'),
+                  onError: (error) => _showSnackBar(context, error.toString()),
+                ),
+                SizedBox(width: 8),
+                AppleWalletButton(),
+              ],
             ),
 
             /*AddToGoogleWalletButton(pass: _examplePass,
