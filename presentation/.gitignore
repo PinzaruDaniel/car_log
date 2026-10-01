@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Native ObjectBox libraries downloaded for host-side tests, not app assets.
+/lib/libobjectbox.dylib
+/lib/libobjectbox.so
+/lib/objectbox.dll

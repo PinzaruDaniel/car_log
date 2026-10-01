@@ -1,35 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Trans;
+import 'base/base_controller.dart';
+import '../localization/localization.dart';
 import 'package:smart_form_fields/smart_form_fields.dart';
 
-class AuthController extends GetxController {
-  RxList<SmartTextFieldViewItem> formFieldViewItems = .new([]);
-  RxBool useVinCode = .new(true);
+class AuthController extends BaseController {
+  final RxList<SmartTextFieldViewItem> formFieldViewItems = .new([]);
+  final RxBool useVinCode = .new(true);
+  final formController = SmartFormController();
+
+  void toggleVinMode() {
+    useVinCode.toggle();
+    if (!useVinCode.value) initViewItems();
+  }
+
+  @override
+  void onClose() {
+    formController.dispose();
+    super.onClose();
+  }
 
   void initViewItems() {
     formFieldViewItems.value = [
       SmartTextFieldViewItem(
         name: 'make',
-        decoration: const InputDecoration(labelText: 'Make', hintText: 'e.g. Toyota, BMW'),
-        validators: [SmartValidators.required(message: 'Make is required')],
+        decoration: InputDecoration(
+          labelText: LocaleKeys.make.tr(),
+          hintText: LocaleKeys.make_hint.tr(),
+        ),
+        validators: [
+          SmartValidators.required(
+            message: LocaleKeys.required_field.tr(
+              namedArgs: {'label': LocaleKeys.make.tr()},
+            ),
+          ),
+        ],
       ),
       SmartTextFieldViewItem(
         name: 'model',
-        decoration: const InputDecoration(labelText: 'Model', hintText: 'e.g. Camry, 3 Series'),
-        validators: [SmartValidators.required(message: 'Model is required')],
+        decoration: InputDecoration(
+          labelText: LocaleKeys.model.tr(),
+          hintText: LocaleKeys.model_hint.tr(),
+        ),
+        validators: [
+          SmartValidators.required(
+            message: LocaleKeys.required_field.tr(
+              namedArgs: {'label': LocaleKeys.model.tr()},
+            ),
+          ),
+        ],
       ),
       SmartTextFieldViewItem(
         name: 'year',
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(labelText: 'Year', hintText: 'e.g. 2022'),
+        decoration: InputDecoration(
+          labelText: LocaleKeys.year.tr(),
+          hintText: LocaleKeys.year_hint.tr(),
+        ),
         validators: [
-          SmartValidators.required(message: 'Year is required'),
-          SmartValidators.number(message: 'Please enter a valid year'),
+          SmartValidators.required(
+            message: LocaleKeys.required_field.tr(
+              namedArgs: {'label': LocaleKeys.year.tr()},
+            ),
+          ),
+          SmartValidators.number(message: LocaleKeys.valid_year.tr()),
         ],
       ),
       SmartTextFieldViewItem(
         name: 'body_type',
-        decoration: const InputDecoration(labelText: 'Body Type', hintText: 'e.g. Sedan, SUV, Coupe, Hatchback'),
+        decoration: InputDecoration(
+          labelText: LocaleKeys.body_type.tr(),
+          hintText: LocaleKeys.body_hint.tr(),
+        ),
       ),
     ];
   }

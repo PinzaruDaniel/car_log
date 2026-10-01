@@ -1,3 +1,4 @@
+import '../localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wallet_kit/flutter_wallet_kit.dart';
 
@@ -11,7 +12,7 @@ class AppleWalletButton extends StatefulWidget {
 }
 
 class _AppleWalletButtonState extends State<AppleWalletButton> {
-  final _service = const AppleWalletService();
+  final _service = AppleWalletService();
 
   bool _loading = false;
   bool _alreadyAdded = false;
@@ -52,12 +53,20 @@ class _AppleWalletButtonState extends State<AppleWalletButton> {
           break;
 
         default:
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Wallet error: ${result.name}')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                LocaleKeys.wallet_unavailable.tr(),
+              ),
+            ),
+          );
       }
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.wallet_unavailable.tr())),
+      );
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -68,13 +77,17 @@ class _AppleWalletButtonState extends State<AppleWalletButton> {
   @override
   Widget build(BuildContext context) {
     if (_alreadyAdded) {
-      return const Text('Already added to Apple Wallet');
+      return Text(LocaleKeys.wallet_added.tr());
     }
 
     if (_loading) {
-      return const CircularProgressIndicator();
+      return CircularProgressIndicator();
     }
 
-    return SizedBox(width: 220, height: 48, child: AddToAppleWalletButton(onPressed: _addPass));
+    return SizedBox(
+      width: 220,
+      height: 48,
+      child: AddToAppleWalletButton(onPressed: _addPass),
+    );
   }
 }

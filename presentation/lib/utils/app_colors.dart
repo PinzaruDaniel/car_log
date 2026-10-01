@@ -18,9 +18,21 @@ class AppColors {
   static const Color statusDanger = Color(0xFFEF4444);
 }
 
- final ThemeData carTrackerDarkTheme = ThemeData(
+final ThemeData carTrackerDarkTheme = ThemeData(
   brightness: Brightness.dark,
+  fontFamily: 'NotoSans',
   scaffoldBackgroundColor: AppColors.scaffoldDark,
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      minimumSize: const Size(0, 52),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      textStyle: const TextStyle(
+        fontFamily: 'NotoSans',
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
   colorScheme: const ColorScheme.dark(
     primary: AppColors.primaryAmber,
     secondary: AppColors.primaryAmberLight,
@@ -36,50 +48,35 @@ class AppColors {
       side: const BorderSide(color: AppColors.borderStroke, width: 1),
     ),
   ),
-   inputDecorationTheme: InputDecorationTheme(
-     filled: true,
-     fillColor: AppColors.inputSurface,
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: AppColors.inputSurface,
 
-     border: OutlineInputBorder(
-       borderRadius: BorderRadius.circular(12),
-     ),
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 
-     enabledBorder: OutlineInputBorder(
-       borderRadius: BorderRadius.circular(12),
-       borderSide: const BorderSide(
-         color: AppColors.borderStroke,
-         width: 1,
-       ),
-     ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.borderStroke, width: 1),
+    ),
 
-     focusedBorder: OutlineInputBorder(
-       borderRadius: BorderRadius.circular(12),
-       borderSide: const BorderSide(
-         color: AppColors.primaryAmber,
-         width: 2,
-       ),
-     ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.primaryAmber, width: 2),
+    ),
 
-     errorBorder: OutlineInputBorder(
-       borderRadius: BorderRadius.circular(12),
-       borderSide: const BorderSide(
-         color: AppColors.statusDanger,
-         width: 1,
-       ),
-     ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.statusDanger, width: 1),
+    ),
 
-     focusedErrorBorder: OutlineInputBorder(
-       borderRadius: BorderRadius.circular(12),
-       borderSide: const BorderSide(
-         color: AppColors.statusDanger,
-         width: 2,
-       ),
-     ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.statusDanger, width: 2),
+    ),
 
     /* contentPadding: const EdgeInsets.symmetric(
        horizontal: 16,
        vertical: 14,
      ),*/
-   ),
-
- );
+  ),
+);

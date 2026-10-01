@@ -1,5 +1,7 @@
+import '../../widgets/localized_obx.dart';
+import '../../localization/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Trans;
 import 'package:smart_form_fields/smart_form_fields.dart';
 
 import '../../controllers/auth_controller.dart';
@@ -14,7 +16,7 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   AuthController get controller => Get.find<AuthController>();
 
-  SmartFormController get formController => SmartFormController();
+  SmartFormController get formController => controller.formController;
 
   @override
   void initState() {
@@ -22,26 +24,35 @@ class _AuthPageState extends State<AuthPage> {
     Get.put(AuthController());
   }
 
-  void toggle() {
-    controller.useVinCode.value = !controller.useVinCode.value;
-    if (!controller.useVinCode.value) {
-      controller.initViewItems();
-    }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Localizations.localeOf(context);
+    controller.initViewItems();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<AuthController>();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Auth')),
+      appBar: AppBar(title: Text(LocaleKeys.auth.tr())),
       body: Column(
         children: [
-          Obx(() {
+          LocalizedObx(() {
             return SmartForm(
               controller: formController,
               children: [
                 SmartFormField(
                   builder: (context, field) {
-                    return SwitchListTile(value: controller.useVinCode.value, onChanged: (_) => toggle.call());
+                    return SwitchListTile(
+                      value: controller.useVinCode.value,
+                      onChanged: (_) => controller.toggleVinMode(),
+                    );
                   },
                 ),
                 controller.useVinCode.value
@@ -49,20 +60,25 @@ class _AuthPageState extends State<AuthPage> {
                         item: SmartTextFieldViewItem(
                           name: 'vin',
                           validators: <SmartValidator>[
-                            SmartValidators.length(17, message: 'Vin must be 17 characters long'),
+                            SmartValidators.length(
+                              17,
+                              message: LocaleKeys.vin_length.tr(),
+                            ),
                           ],
                         ),
                       )
                     : Column(
-                        children: controller.formFieldViewItems.map((item) => SmartTextField(item: item)).toList(),
+                        children: controller.formFieldViewItems
+                            .map((item) => SmartTextField(item: item))
+                            .toList(),
                       ),
               ],
             );
           }),
         ],
-      ) /*Obx(() {
+      ) /*LocalizedObx(() {
         if (controller.items.isEmpty) {
-          return const Center(child: Text('Auth'));
+          return Center(child: Text(LocaleKeys.auth.tr()));
         }
         return ListView.builder(
           itemCount: controller.items.length,

@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'injector.config.dart';
 
-@InjectableInit()
+@InjectableInit(preferRelativeImports: true)
 Future<void> configureDependencies(GetIt get) async {
   await get.init();
 }

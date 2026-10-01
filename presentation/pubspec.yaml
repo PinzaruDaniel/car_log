@@ -16,19 +16,28 @@ dependencies:
   di:
     path: ../di
   get_it: ^9.2.1
+  easy_localization: ^3.0.8
+  intl: ^0.20.2
   get: ^4.7.3
+  smart_domain: ^0.4.0
   flutter_liquid_glass_kit: ^1.5.0
   smart_form_fields: ^2.0.0
+  selection_sheet: ^0.6.1
+  sensor_shadows: ^0.2.0
+  flutter_mesh_gradients: ^0.1.0
+  pdf: ^3.12.0
+  printing: ^5.15.1
+  assets_generator_kit: ^0.1.0
   flutter_wallet_card: ^5.0.0
   uuid: ^4.6.0
   add_to_google_wallet: ^0.0.5
   flutter_wallet_kit: ^0.0.1
 dev_dependencies:
+  shared_preferences: ^2.5.5
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   build_runner: ^2.15.1
-  assets_generator_kit: ^0.1.0
 flutter:
   config:
     enable-swift-package-manager: true
@@ -36,3 +45,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/wallet/
+    - assets/fonts/
+    - assets/localization/
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf

@@ -634,6 +634,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  smart_domain:
+    dependency: transitive
+    description:
+      name: smart_domain
+      sha256: f73860dee96189f3a32b906fc43a3148b3804195e61c253b8645692d54c799af
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
+  smart_repository:
+    dependency: "direct main"
+    description:
+      name: smart_repository
+      sha256: "4a31bd1a5953501b21a70aeeb210f693c23803c4fa53218e665bf09434555416"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   source_gen:
     dependency: transitive
     description:

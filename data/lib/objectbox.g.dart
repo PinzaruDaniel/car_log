@@ -15,6 +15,8 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'features/auth/local/models/auth_box.dart';
+import 'features/vehicle/local/models/garage_vehicle_box.dart';
+import 'features/vehicle/local/models/service_record_box.dart';
 import 'features/vehicle/local/models/vehicle_box.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -58,6 +60,146 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(2, 5418453194926022068),
         name: 'remoteId',
         type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(3, 3665636680632922727),
+    name: 'GarageVehicleBox',
+    lastPropertyId: const obx_int.IdUid(11, 5947402799114494385),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5932678857658509816),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 392177363744494514),
+        name: 'make',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1739139564121026167),
+        name: 'model',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 5880169603852016063),
+        name: 'vin',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 7312425822131775129),
+        name: 'body',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 3068816268023998726),
+        name: 'fuel',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 2931094182251746257),
+        name: 'engine',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 5862734849886257629),
+        name: 'year',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 2299938426385332206),
+        name: 'odometer',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 8807238023658068941),
+        name: 'oilInterval',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 5947402799114494385),
+        name: 'insuranceExpiry',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(1, 2325507464158632181),
+        name: 'records',
+        targetId: const obx_int.IdUid(4, 7795220756528324484),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(4, 7795220756528324484),
+    name: 'ServiceRecordBox',
+    lastPropertyId: const obx_int.IdUid(8, 1696927321930473235),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 8046908745207479827),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3191347978555835659),
+        name: 'title',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 7485024691013361319),
+        name: 'kindName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 4415002957318489064),
+        name: 'notes',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 1649941679646413330),
+        name: 'date',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 3102520347453309626),
+        name: 'km',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 5075979651272510020),
+        name: 'cost',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 1696927321930473235),
+        name: 'oil',
+        type: 1,
         flags: 0,
       ),
     ],
@@ -109,9 +251,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(2, 35448434071534752),
+    lastEntityId: const obx_int.IdUid(4, 7795220756528324484),
     lastIndexId: const obx_int.IdUid(0, 0),
-    lastRelationId: const obx_int.IdUid(0, 0),
+    lastRelationId: const obx_int.IdUid(1, 2325507464158632181),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [],
@@ -189,6 +331,189 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    GarageVehicleBox: obx_int.EntityDefinition<GarageVehicleBox>(
+      model: _entities[2],
+      toOneRelations: (GarageVehicleBox object) => [],
+      toManyRelations: (GarageVehicleBox object) => {
+        obx_int.RelInfo<GarageVehicleBox>.toMany(1, object.id): object.records,
+      },
+      getId: (GarageVehicleBox object) => object.id,
+      setId: (GarageVehicleBox object, int id) {
+        object.id = id;
+      },
+      objectToFB: (GarageVehicleBox object, fb.Builder fbb) {
+        final makeOffset = fbb.writeString(object.make);
+        final modelOffset = fbb.writeString(object.model);
+        final vinOffset = fbb.writeString(object.vin);
+        final bodyOffset = fbb.writeString(object.body);
+        final fuelOffset = fbb.writeString(object.fuel);
+        final engineOffset = fbb.writeString(object.engine);
+        fbb.startTable(12);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, makeOffset);
+        fbb.addOffset(2, modelOffset);
+        fbb.addOffset(3, vinOffset);
+        fbb.addOffset(4, bodyOffset);
+        fbb.addOffset(5, fuelOffset);
+        fbb.addOffset(6, engineOffset);
+        fbb.addInt64(7, object.year);
+        fbb.addInt64(8, object.odometer);
+        fbb.addInt64(9, object.oilInterval);
+        fbb.addInt64(10, object.insuranceExpiry?.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final insuranceExpiryValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          24,
+        );
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final makeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final modelParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final yearParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          18,
+          0,
+        );
+        final odometerParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          20,
+          0,
+        );
+        final vinParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final bodyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final fuelParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final engineParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final oilIntervalParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          22,
+          0,
+        );
+        final insuranceExpiryParam = insuranceExpiryValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(insuranceExpiryValue);
+        final object = GarageVehicleBox(
+          id: idParam,
+          make: makeParam,
+          model: modelParam,
+          year: yearParam,
+          odometer: odometerParam,
+          vin: vinParam,
+          body: bodyParam,
+          fuel: fuelParam,
+          engine: engineParam,
+          oilInterval: oilIntervalParam,
+          insuranceExpiry: insuranceExpiryParam,
+        );
+        obx_int.InternalToManyAccess.setRelInfo<GarageVehicleBox>(
+          object.records,
+          store,
+          obx_int.RelInfo<GarageVehicleBox>.toMany(1, object.id),
+        );
+        return object;
+      },
+    ),
+    ServiceRecordBox: obx_int.EntityDefinition<ServiceRecordBox>(
+      model: _entities[3],
+      toOneRelations: (ServiceRecordBox object) => [],
+      toManyRelations: (ServiceRecordBox object) => {},
+      getId: (ServiceRecordBox object) => object.id,
+      setId: (ServiceRecordBox object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ServiceRecordBox object, fb.Builder fbb) {
+        final titleOffset = fbb.writeString(object.title);
+        final kindNameOffset = fbb.writeString(object.kindName);
+        final notesOffset = fbb.writeString(object.notes);
+        fbb.startTable(9);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, titleOffset);
+        fbb.addOffset(2, kindNameOffset);
+        fbb.addOffset(3, notesOffset);
+        fbb.addInt64(4, object.date.millisecondsSinceEpoch);
+        fbb.addInt64(5, object.km);
+        fbb.addFloat64(6, object.cost);
+        fbb.addBool(7, object.oil);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final titleParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final dateParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
+        );
+        final kmParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          0,
+        );
+        final kindNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final costParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          16,
+          0,
+        );
+        final notesParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final oilParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          18,
+          false,
+        );
+        final object = ServiceRecordBox(
+          id: idParam,
+          title: titleParam,
+          date: dateParam,
+          km: kmParam,
+          kindName: kindNameParam,
+          cost: costParam,
+          notes: notesParam,
+          oil: oilParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -217,5 +542,112 @@ class VehicleBox_ {
   /// See [VehicleBox.remoteId].
   static final remoteId = obx.QueryStringProperty<VehicleBox>(
     _entities[1].properties[1],
+  );
+}
+
+/// [GarageVehicleBox] entity fields to define ObjectBox queries.
+class GarageVehicleBox_ {
+  /// See [GarageVehicleBox.id].
+  static final id = obx.QueryIntegerProperty<GarageVehicleBox>(
+    _entities[2].properties[0],
+  );
+
+  /// See [GarageVehicleBox.make].
+  static final make = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[1],
+  );
+
+  /// See [GarageVehicleBox.model].
+  static final model = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[2],
+  );
+
+  /// See [GarageVehicleBox.vin].
+  static final vin = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[3],
+  );
+
+  /// See [GarageVehicleBox.body].
+  static final body = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[4],
+  );
+
+  /// See [GarageVehicleBox.fuel].
+  static final fuel = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[5],
+  );
+
+  /// See [GarageVehicleBox.engine].
+  static final engine = obx.QueryStringProperty<GarageVehicleBox>(
+    _entities[2].properties[6],
+  );
+
+  /// See [GarageVehicleBox.year].
+  static final year = obx.QueryIntegerProperty<GarageVehicleBox>(
+    _entities[2].properties[7],
+  );
+
+  /// See [GarageVehicleBox.odometer].
+  static final odometer = obx.QueryIntegerProperty<GarageVehicleBox>(
+    _entities[2].properties[8],
+  );
+
+  /// See [GarageVehicleBox.oilInterval].
+  static final oilInterval = obx.QueryIntegerProperty<GarageVehicleBox>(
+    _entities[2].properties[9],
+  );
+
+  /// See [GarageVehicleBox.insuranceExpiry].
+  static final insuranceExpiry = obx.QueryDateProperty<GarageVehicleBox>(
+    _entities[2].properties[10],
+  );
+
+  /// see [GarageVehicleBox.records]
+  static final records =
+      obx.QueryRelationToMany<GarageVehicleBox, ServiceRecordBox>(
+        _entities[2].relations[0],
+      );
+}
+
+/// [ServiceRecordBox] entity fields to define ObjectBox queries.
+class ServiceRecordBox_ {
+  /// See [ServiceRecordBox.id].
+  static final id = obx.QueryIntegerProperty<ServiceRecordBox>(
+    _entities[3].properties[0],
+  );
+
+  /// See [ServiceRecordBox.title].
+  static final title = obx.QueryStringProperty<ServiceRecordBox>(
+    _entities[3].properties[1],
+  );
+
+  /// See [ServiceRecordBox.kindName].
+  static final kindName = obx.QueryStringProperty<ServiceRecordBox>(
+    _entities[3].properties[2],
+  );
+
+  /// See [ServiceRecordBox.notes].
+  static final notes = obx.QueryStringProperty<ServiceRecordBox>(
+    _entities[3].properties[3],
+  );
+
+  /// See [ServiceRecordBox.date].
+  static final date = obx.QueryDateProperty<ServiceRecordBox>(
+    _entities[3].properties[4],
+  );
+
+  /// See [ServiceRecordBox.km].
+  static final km = obx.QueryIntegerProperty<ServiceRecordBox>(
+    _entities[3].properties[5],
+  );
+
+  /// See [ServiceRecordBox.cost].
+  static final cost = obx.QueryDoubleProperty<ServiceRecordBox>(
+    _entities[3].properties[6],
+  );
+
+  /// See [ServiceRecordBox.oil].
+  static final oil = obx.QueryBooleanProperty<ServiceRecordBox>(
+    _entities[3].properties[7],
   );
 }
