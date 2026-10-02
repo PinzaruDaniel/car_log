@@ -51,3 +51,9 @@ app.*.map.json
 /lib/libobjectbox.dylib
 /lib/libobjectbox.so
 /lib/objectbox.dll
+
+# Backend credentials must never be bundled with the Flutter app.
+/assets/*service-account*.json
+/assets/*service_account*.json
+/assets/*credentials*.json
+/assets/carlog-*.json
