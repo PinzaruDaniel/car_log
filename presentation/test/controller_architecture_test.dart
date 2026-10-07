@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:car_log/controllers/base/base_controller.dart';
 import 'package:car_log/controllers/main_app_controller.dart';
-import 'package:car_log/controllers/vehicle_controller.dart';
+import 'package:car_log/pages/timeline/timeline_controller.dart';
 import 'package:car_log/localization/localization.dart';
 import 'package:car_log/main.dart';
 import 'package:car_log/pages/main_page.dart';
@@ -69,9 +69,10 @@ void main() {
         year: 2002,
         odometer: 287450,
       );
-    final controller = fixtures.vehicleController(repository);
-    await tester.pumpWidget(fixtures.app(MainPage(controller: controller)));
+    final controller = fixtures.mainController(repository);
+    await tester.pumpWidget(fixtures.app(const MainPage()));
     await tester.pumpAndSettle();
+    final timelineController = Get.find<TimelineController>();
     controller.vehicle.value = controller.vehicle.value!.copyWith(
       odometer: 288000,
     );
@@ -80,13 +81,13 @@ void main() {
       find.textContaining('288,000 km', findRichText: true),
       findsOneWidget,
     );
-    controller.tab.value = 1;
+    controller.changeMainTab(1);
     await tester.pumpAndSettle();
     expect(find.text('No records in this category.'), findsOneWidget);
-    controller.startLoading([VehicleController.exportKey]);
+    timelineController.startLoading([TimelineController.exportKey]);
     await tester.pump();
     expect(find.text('Exporting…'), findsOneWidget);
-    controller.stopLoading([VehicleController.exportKey]);
+    timelineController.stopLoading([TimelineController.exportKey]);
     await tester.pump();
     expect(find.text('Export PDF'), findsOneWidget);
   });
@@ -129,7 +130,7 @@ void main() {
     expect(find.text('Garaj'), findsOneWidget);
     expect(Get.find<MainAppController>(), same(root));
     expect(repository.loads, 1);
-    root.vehicleController.tab.value = 1;
+    root.changeMainTab(1);
     await tester.pumpAndSettle();
     expect(find.text('septembrie 2026'), findsOneWidget);
     expect(find.text('Schimb ulei și filtre'), findsOneWidget);

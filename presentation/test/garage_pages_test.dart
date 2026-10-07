@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:car_log/pages/main_page.dart';
 import 'package:car_log/pages/timeline/timeline_page.dart';
+import 'package:car_log/pages/timeline/timeline_controller.dart';
 import 'package:car_log/widgets/garage_button.dart';
 import 'package:car_log/widgets/motion_surface.dart';
 import 'package:domain/features/garage/entities/garage_vehicle.dart';
@@ -9,6 +10,7 @@ import 'package:domain/features/garage/repositories/garage_repository.dart';
 import 'package:domain/injector.dart' as domain_di;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sensor_shadows/sensor_shadows.dart';
 import 'garage_flow_test.dart' as fixtures;
@@ -51,23 +53,29 @@ fixtures.MemoryGarage savedGarage() =>
 void main() {
   setUp(() async {
     await fixtures.initializeTestLocalization();
+    Get.testMode = true;
     GetIt.instance.registerSingleton<GarageRepository>(fixtures.MemoryGarage());
     domain_di.configureDependencies(GetIt.instance);
   });
-  tearDown(() => GetIt.instance.reset());
+  tearDown(() async {
+    Get.reset();
+    await GetIt.instance.reset();
+  });
 
   test('controller groups sorted history by year/month and category', () {
-    final controller = fixtures.vehicleController(savedGarage());
-    controller.acceptVehicle(savedGarage().vehicle!);
-    expect(controller.historyGroups.map((g) => (g.year, g.month)), [
+    final vehicle = savedGarage().vehicle!;
+    final controller = TimelineController();
+    addTearDown(controller.onDelete.call);
+    expect(controller.historyGroups(vehicle).map((g) => (g.year, g.month)), [
       (2026, 9),
       (2026, 7),
       (2025, 12),
     ]);
     controller.setFilter(ServiceKind.fuel);
-    expect(controller.historyGroups.single.records.single.title, 'Fuel stop');
-    controller.showGarage();
-    expect(controller.tab.value, 0);
+    expect(
+      controller.historyGroups(vehicle).single.records.single.title,
+      'Fuel stop',
+    );
   });
 
   testWidgets('history filters, empty state, back and remaining tabs work', (
@@ -78,8 +86,8 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     final repository = savedGarage();
-    final controller = fixtures.vehicleController(repository);
-    await tester.pumpWidget(fixtures.app(MainPage(controller: controller)));
+    fixtures.mainController(repository);
+    await tester.pumpWidget(fixtures.app(const MainPage()));
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel('Car illustration'), findsNothing);
     expect(find.byType(SensorShadowButton), findsWidgets);
@@ -107,13 +115,16 @@ void main() {
   testWidgets('empty history can save its first record', (tester) async {
     final repository = savedGarage()
       ..vehicle = savedGarage().vehicle!.copyWith(records: []);
-    final controller = fixtures.vehicleController(repository);
-    await tester.pumpWidget(fixtures.app(MainPage(controller: controller)));
+    fixtures.mainController(repository);
+    await tester.pumpWidget(fixtures.app(const MainPage()));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Timeline'));
     await tester.pumpAndSettle();
     expect(find.text('No records in this category.'), findsOneWidget);
-    await tester.tap(find.text('Add record'));
+    final addRecordButton = find.text('Add record');
+    await tester.ensureVisible(addRecordButton);
+    await tester.pumpAndSettle();
+    await tester.tap(addRecordButton);
     await tester.pumpAndSettle();
     await fixtures.enterField(tester, 'title', 'Air filter replaced');
     await fixtures.enterField(tester, 'km', '287400');
@@ -133,8 +144,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    final controller = fixtures.vehicleController(savedGarage())
-      ..acceptVehicle(savedGarage().vehicle!);
+    fixtures.mainController(savedGarage());
     await tester.pumpWidget(
       fixtures.app(
         MediaQuery(
@@ -144,7 +154,7 @@ void main() {
           ),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            child: TimelinePage(controller: controller),
+            child: const TimelinePage(),
           ),
         ),
       ),

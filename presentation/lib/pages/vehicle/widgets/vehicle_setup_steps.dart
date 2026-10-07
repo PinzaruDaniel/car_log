@@ -27,22 +27,27 @@ class VehicleSetupSteps extends StatelessWidget {
   List<String> get _filters => controller.filters;
 
   @override
-  Widget build(BuildContext context) => LocalizedObx(() => _buildPage(context));
-  Widget _buildPage(BuildContext context) => AnimatedSize(
-    duration: Duration(milliseconds: 300),
-    curve: Curves.easeInOutCubic,
-    alignment: Alignment.topCenter,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Each controller keeps exactly one form, even during rapid step changes.
-        Visibility(visible: _step == 0, maintainState: true, child: _carStep()),
-        Visibility(
-          visible: _step == 1,
-          maintainState: true,
-          child: _serviceStep(context),
-        ),
-      ],
+  Widget build(BuildContext context) => LocalizedObx(
+    () => AnimatedSize(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+      alignment: Alignment.topCenter,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Each controller keeps exactly one form, even during rapid step changes.
+          Visibility(
+            visible: _step == 0,
+            maintainState: true,
+            child: _carStep(),
+          ),
+          Visibility(
+            visible: _step == 1,
+            maintainState: true,
+            child: _serviceStep(context),
+          ),
+        ],
+      ),
     ),
   );
   Widget _field(

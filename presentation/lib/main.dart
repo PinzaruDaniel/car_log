@@ -1,5 +1,6 @@
 import 'package:di/di.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:car_log/pages/main_page.dart';
 import 'package:car_log/utils/app_colors.dart';
@@ -38,29 +39,35 @@ class CarLogApp extends StatelessWidget {
     Intl.defaultLocale = context.locale.toLanguageTag();
     // GetMaterialApp prefers Get.locale over updated widget.locale.
     Get.locale = context.locale;
-    return SensorShadows(
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: LocaleKeys.app_name.tr(),
-        theme: carTrackerDarkTheme,
-        initialBinding: RootBinding(),
-        locale: context.locale,
-        supportedLocales: context.supportedLocales,
-        localizationsDelegates: context.localizationDelegates,
-        initialRoute: AppRoutes.startup,
-        getPages: [
-          GetPage(name: AppRoutes.startup, page: () => const StartupPage()),
-          GetPage(name: AppRoutes.main, page: () => const MainPage()),
-          GetPage(
-            name: AppRoutes.onboarding,
-            page: () => VehicleOnboardingPage(
-              onSaved: Get.find<MainAppController>().completeOnboarding,
+    return ScreenUtilInit(
+      useInheritedMediaQuery: true,
+      designSize: const Size(440, 956),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => SensorShadows(
+        child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: LocaleKeys.app_name.tr(),
+          theme: carTrackerDarkTheme,
+          initialBinding: RootBinding(),
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
+          initialRoute: AppRoutes.startup,
+          getPages: [
+            GetPage(name: AppRoutes.startup, page: () => const StartupPage()),
+            GetPage(name: AppRoutes.main, page: () => const MainPage()),
+            GetPage(
+              name: AppRoutes.onboarding,
+              page: () => VehicleOnboardingPage(
+                onSaved: Get.find<MainAppController>().completeOnboarding,
+              ),
             ),
+          ],
+          builder: (context, child) => SmartFormTheme(
+            data: SmartFormThemeData(errorAnimation: SmartErrorAnimation.shake),
+            child: child!,
           ),
-        ],
-        builder: (context, child) => SmartFormTheme(
-          data: SmartFormThemeData(errorAnimation: SmartErrorAnimation.shake),
-          child: child!,
         ),
       ),
     );

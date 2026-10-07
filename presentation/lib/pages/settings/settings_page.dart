@@ -2,18 +2,28 @@ import '../../widgets/localized_obx.dart';
 import '../../localization/localization.dart';
 import 'package:domain/features/garage/entities/garage_vehicle.dart';
 import 'package:flutter/material.dart';
-import '../../controllers/vehicle_controller.dart';
+import '../../controllers/base/imports/controller_imports.dart';
+import '../../page+state/base_state.dart';
 import '../../widgets/garage_widgets.dart';
+import 'settings_controller.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({required this.controller, super.key});
-  final VehicleController controller;
-  GarageVehicle? get _vehicle => controller.vehicle.value;
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
-  Widget build(BuildContext context) => LocalizedObx(() => _buildPage(context));
-  Widget _buildPage(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: _settings(context),
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends BaseState<SettingsPage, SettingsController> {
+  @override
+  SettingsController buildController() => SettingsController();
+
+  @override
+  Widget build(BuildContext context) => LocalizedObx(
+    () => Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: _settings(context, mainAppController.vehicle.value),
+    ),
   );
   Widget _detail(String label, String value) => Padding(
     padding: EdgeInsets.only(bottom: 7),
@@ -30,28 +40,24 @@ class SettingsPage extends StatelessWidget {
       style: TextStyle(fontSize: 16),
     ),
   );
-  List<Widget> _settings(BuildContext context) => [
+  List<Widget> _settings(BuildContext context, GarageVehicle? vehicle) => [
     GarageCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionTitle(_vehicle!.title),
-          _detail(LocaleKeys.year.tr(), '${_vehicle!.year}'),
-          if (_vehicle!.vin.isNotEmpty)
-            _detail(LocaleKeys.vin.tr(), _vehicle!.vin),
-          if (_vehicle!.body.isNotEmpty)
-            _detail(LocaleKeys.body.tr(), _vehicle!.body),
-          if (_vehicle!.fuel.isNotEmpty)
-            _detail(LocaleKeys.fuel.tr(), _vehicle!.fuel),
-          if (_vehicle!.engine.isNotEmpty)
+          SectionTitle(vehicle!.title),
+          _detail(LocaleKeys.year.tr(), '${vehicle.year}'),
+          if (vehicle.vin.isNotEmpty) _detail(LocaleKeys.vin.tr(), vehicle.vin),
+          if (vehicle.body.isNotEmpty)
+            _detail(LocaleKeys.body.tr(), vehicle.body),
+          if (vehicle.fuel.isNotEmpty)
+            _detail(LocaleKeys.fuel.tr(), vehicle.fuel),
+          if (vehicle.engine.isNotEmpty)
             _detail(
               LocaleKeys.engine.tr(),
-              LocaleKeys.litres.tr(namedArgs: {'value': _vehicle!.engine}),
+              LocaleKeys.litres.tr(namedArgs: {'value': vehicle.engine}),
             ),
-          _detail(
-            LocaleKeys.oil_interval.tr(),
-            distance(_vehicle!.oilInterval),
-          ),
+          _detail(LocaleKeys.oil_interval.tr(), distance(vehicle.oilInterval)),
           Divider(height: 32),
           Text(
             LocaleKeys.saved_device.tr(),
@@ -80,9 +86,7 @@ class SettingsPage extends StatelessWidget {
             child: Text(LocaleKeys.romanian.tr()),
           ),
         ],
-        onChanged: (locale) {
-          if (locale != null) context.setLocale(locale);
-        },
+        onChanged: (locale) => controller.changeLanguage(context, locale),
       ),
     ),
   ];

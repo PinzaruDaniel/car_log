@@ -69,10 +69,7 @@ void main() {
       RootBinding().dependencies();
       expect(Get.find<MainAppController>(), same(root));
       expect(repository.loads, 1);
-      expect(
-        Get.find<MainAppController>().vehicleController.vehicle.value,
-        car,
-      );
+      expect(Get.find<MainAppController>().vehicle.value, car);
       expect(Get.key.currentState!.canPop(), false);
     },
   );
@@ -108,10 +105,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(Get.currentRoute, AppRoutes.main);
       expect(repository.loads, 2);
-      expect(
-        Get.find<MainAppController>().vehicleController.vehicle.value,
-        car,
-      );
+      expect(Get.find<MainAppController>().vehicle.value, car);
     },
   );
 
@@ -132,9 +126,7 @@ void main() {
     expect(repository.loads, 1);
   });
 
-  testWidgets('root shutdown closes child and ignores pending cache result', (
-    tester,
-  ) async {
+  testWidgets('root shutdown ignores pending cache result', (tester) async {
     repository.pending = Completer<GarageVehicle?>();
     await tester.pumpWidget(fixtures.localized(const CarLogApp()));
     await tester.pump();
@@ -142,11 +134,9 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await Get.delete<MainAppController>(force: true);
     expect(controller.isClosed, true);
-    expect(controller.vehicleController.isClosed, true);
-    expect(controller.vehicleController.active, false);
     repository.pending!.complete(car);
     await tester.pumpAndSettle();
-    expect(controller.vehicleController.vehicle.value, isNull);
+    expect(controller.vehicle.value, isNull);
     expect(tester.takeException(), isNull);
   });
 }

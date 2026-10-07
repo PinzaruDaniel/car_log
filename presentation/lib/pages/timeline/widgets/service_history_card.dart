@@ -1,6 +1,7 @@
 import '../../../localization/localization.dart';
 import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../widgets/garage_badge.dart';
 import '../../../widgets/garage_widgets.dart';
 import '../../../utils/app_colors.dart';
@@ -19,36 +20,24 @@ class ServiceHistoryCard extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final title = Text(
-              recordTitle(record),
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
-              ),
-            );
-            final cost = GarageBadge(
-              money(record.cost, decimals: 0),
-              filled: true,
-            );
-            return constraints.maxWidth < 260 ||
-                    MediaQuery.textScalerOf(context).scale(1) > 1.3
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [title, SizedBox(height: 12), cost],
-                  )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: title),
-                      SizedBox(width: 12),
-                      cost,
-                    ],
-                  );
-          },
-        ),
+        if (1.sw < 360 || MediaQuery.textScalerOf(context).scale(1) > 1.3)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _title(),
+              SizedBox(height: 12.h),
+              _cost(),
+            ],
+          )
+        else
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _title()),
+              SizedBox(width: 12.w),
+              _cost(),
+            ],
+          ),
         SizedBox(height: 14),
         GarageBadge(distance(record.km), color: Colors.white60),
         SizedBox(height: 10),
@@ -83,4 +72,11 @@ class ServiceHistoryCard extends StatelessWidget {
       ],
     ),
   );
+
+  Widget _title() => Text(
+    recordTitle(record),
+    style: TextStyle(fontSize: 19.sp, fontWeight: FontWeight.w600, height: 1.3),
+  );
+
+  Widget _cost() => GarageBadge(money(record.cost, decimals: 0), filled: true);
 }

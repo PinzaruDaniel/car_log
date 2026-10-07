@@ -5,7 +5,7 @@ import 'package:car_log/main.dart';
 import 'package:car_log/navigation/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:car_log/pages/vehicle/vehicle_onboarding_page.dart';
-import 'package:car_log/controllers/vehicle_controller.dart';
+import 'package:car_log/pages/vehicle/vehicle_controller.dart';
 import 'package:car_log/controllers/main_app_controller.dart';
 import 'package:car_log/controllers/vehicle_onboarding_controller.dart';
 import 'package:car_log/controllers/service_record_controller.dart';
@@ -29,6 +29,7 @@ import 'package:domain/features/garage/usecases/get_garage_use_case.dart';
 import 'package:domain/features/garage/usecases/save_garage_use_case.dart';
 import 'package:domain/features/vehicle/usecases/decode_vin_use_case.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:car_log/utils/service_history_pdf.dart';
@@ -72,13 +73,17 @@ class StubLegacyGarage extends LegacyGarageLocalDataSource {
   }
 }
 
-VehicleController vehicleController(MemoryGarage repository) {
-  final controller = VehicleController(
-    saveGarageUseCase: SaveGarageUseCase(repository),
-  );
-  controller.onStart();
+class TestMainAppController extends MainAppController {
+  @override
+  void onReady() {}
+}
+
+MainAppController mainController(MemoryGarage repository) {
+  GetIt.instance.allowReassignment = true;
+  GetIt.instance.registerSingleton<GarageRepository>(repository);
+  final controller = TestMainAppController();
   if (repository.vehicle != null) controller.acceptVehicle(repository.vehicle!);
-  addTearDown(controller.onDelete.call);
+  Get.put<MainAppController>(controller, permanent: true);
   return controller;
 }
 
@@ -95,13 +100,19 @@ Widget app(Widget child) => localized(
   RepaintBoundary(
     key: const ValueKey('preview'),
     child: Builder(
-      builder: (context) => MaterialApp(
-        locale: context.locale,
-        supportedLocales: context.supportedLocales,
-        localizationsDelegates: context.localizationDelegates,
-        debugShowCheckedModeBanner: false,
-        theme: carTrackerDarkTheme,
-        home: SmartFormTheme(data: const SmartFormThemeData(), child: child),
+      builder: (context) => ScreenUtilInit(
+        useInheritedMediaQuery: true,
+        designSize: const Size(440, 956),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (screenContext, screenChild) => MaterialApp(
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
+          debugShowCheckedModeBanner: false,
+          theme: carTrackerDarkTheme,
+          home: SmartFormTheme(data: const SmartFormThemeData(), child: child),
+        ),
       ),
     ),
   ),
@@ -426,9 +437,8 @@ void main() {
             ),
           ],
         );
-      await tester.pumpWidget(
-        app(MainPage(controller: vehicleController(repository))),
-      );
+      mainController(repository);
+      await tester.pumpWidget(app(const MainPage()));
       await tester.pumpAndSettle();
       expect(find.text('4,450 km remaining'), findsOneWidget);
       await capture(tester, 'garage');

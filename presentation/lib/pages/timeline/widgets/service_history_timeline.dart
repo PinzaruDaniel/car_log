@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import '../../../controllers/vehicle_controller.dart';
+import 'package:domain/features/garage/entities/garage_vehicle.dart';
+import '../timeline_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/garage_widgets.dart';
 import 'service_history_card.dart';
 
 class ServiceHistoryTimeline extends StatelessWidget {
-  const ServiceHistoryTimeline({required this.controller, super.key});
-  final VehicleController controller;
+  const ServiceHistoryTimeline({
+    required this.controller,
+    required this.vehicle,
+    super.key,
+  });
+  final TimelineController controller;
+  final GarageVehicle vehicle;
 
   @override
   Widget build(BuildContext context) {
-    final groups = controller.historyGroups;
+    final groups = controller.historyGroups(vehicle);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
