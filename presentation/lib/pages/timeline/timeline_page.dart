@@ -1,4 +1,3 @@
-import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/base/imports/controller_imports.dart';
@@ -25,8 +24,8 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
   @override
   Widget build(BuildContext context) => LocalizedObx(() {
     final vehicle = mainAppController.vehicle.value!;
+    final item = controller.buildViewItem(vehicle);
     final exporting = controller.exporting;
-    final historyGroups = controller.historyGroups(vehicle);
     final title = Row(
       children: [
         GarageButton.icon(
@@ -37,7 +36,7 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
         SizedBox(width: 10.w),
         Expanded(
           child: Text(
-            LocaleKeys.history_title.tr(namedArgs: {'car': vehicle.title}),
+            item.title,
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
           ),
         ),
@@ -77,16 +76,16 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
           spacing: 10.w,
           runSpacing: 10.h,
           children: [
-            for (final kind in [null, ...ServiceKind.values])
+            for (final filter in item.filters)
               HistoryFilter(
-                label: controller.categoryLabel(kind),
-                selected: controller.filter.value == kind,
-                onPressed: () => controller.setFilter(kind),
+                label: filter.label,
+                selected: filter.selected,
+                onPressed: () => controller.setFilter(filter.kind),
               ),
           ],
         ),
         SizedBox(height: 26.h),
-        if (historyGroups.isEmpty)
+        if (item.groups.isEmpty)
           GarageCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +108,7 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
                       ? null
                       : () => mainAppController.addRecord(
                           context,
-                          controller.filter.value ?? ServiceKind.maintenance,
+                          item.addRecordKind,
                         ),
                   icon: Icon(Icons.add),
                   label: Text(LocaleKeys.add_record.tr()),
@@ -118,7 +117,7 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
             ),
           )
         else
-          ServiceHistoryTimeline(controller: controller, vehicle: vehicle),
+          ServiceHistoryTimeline(groups: item.groups),
       ],
     );
   });

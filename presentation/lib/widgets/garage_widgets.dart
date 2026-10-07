@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import '../localization/localization.dart';
 import 'package:flutter_mesh_gradients/flutter_mesh_gradients.dart';
 import 'motion_surface.dart';
@@ -17,17 +16,6 @@ String money(num value, {int decimals = 2}) => LocaleKeys.money.tr(
     ).format(value),
   },
 );
-String categoryLabel(ServiceKind? kind) => switch (kind) {
-  null => LocaleKeys.all.tr(),
-  ServiceKind.maintenance => LocaleKeys.maintenance.tr(),
-  ServiceKind.repair => LocaleKeys.repairs.tr(),
-  ServiceKind.fuel => LocaleKeys.fuel.tr(),
-};
-// Translate app-generated values only; never reinterpret users' titles/notes.
-String recordTitle(ServiceRecord record) =>
-    record.title == LocaleKeys.oil_filters_service
-    ? LocaleKeys.oil_filters_service.tr()
-    : record.title;
 String filterLabel(String value) =>
     const [
       LocaleKeys.oil_filter,
@@ -37,9 +25,6 @@ String filterLabel(String value) =>
     ].contains(value)
     ? value.tr()
     : value;
-String recordNotes(ServiceRecord record) => record.oil
-    ? record.notes.split(' · ').map(filterLabel).join(' · ')
-    : record.notes;
 
 class GarageCard extends StatelessWidget {
   const GarageCard({required this.child, this.highlight = false, super.key});

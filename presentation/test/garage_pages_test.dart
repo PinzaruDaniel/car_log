@@ -4,6 +4,7 @@ import 'package:car_log/pages/timeline/timeline_page.dart';
 import 'package:car_log/pages/timeline/timeline_controller.dart';
 import 'package:car_log/widgets/garage_button.dart';
 import 'package:car_log/widgets/motion_surface.dart';
+import 'package:car_log/view_models/garage_vehicle_view_model.dart';
 import 'package:domain/features/garage/entities/garage_vehicle.dart';
 import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:domain/features/garage/repositories/garage_repository.dart';
@@ -17,13 +18,13 @@ import 'garage_flow_test.dart' as fixtures;
 
 fixtures.MemoryGarage savedGarage() =>
     fixtures.MemoryGarage()
-      ..vehicle = GarageVehicle(
+      ..vehicle = GarageVehicleEntity(
         make: 'BMW',
         model: 'E39',
         year: 2002,
         odometer: 287450,
         records: [
-          ServiceRecord(
+          ServiceRecordEntity(
             title: 'Alternator replaced',
             date: DateTime(2026, 9, 1),
             km: 287100,
@@ -31,7 +32,7 @@ fixtures.MemoryGarage savedGarage() =>
             cost: 2400,
             notes: 'Replaced with new alternator and belt.',
           ),
-          ServiceRecord(
+          ServiceRecordEntity(
             title: 'Oil + filters service',
             date: DateTime(2026, 7, 1),
             km: 281900,
@@ -40,7 +41,7 @@ fixtures.MemoryGarage savedGarage() =>
             oil: true,
             notes: '5W-40 Synthetic · Oil filter · Air filter',
           ),
-          ServiceRecord(
+          ServiceRecordEntity(
             title: 'Fuel stop',
             date: DateTime(2025, 12, 1),
             km: 270000,
@@ -63,7 +64,7 @@ void main() {
   });
 
   test('controller groups sorted history by year/month and category', () {
-    final vehicle = savedGarage().vehicle!;
+    final vehicle = fixtures.mainController(savedGarage()).vehicle.value!;
     final controller = TimelineController();
     addTearDown(controller.onDelete.call);
     expect(controller.historyGroups(vehicle).map((g) => (g.year, g.month)), [
@@ -71,7 +72,7 @@ void main() {
       (2026, 7),
       (2025, 12),
     ]);
-    controller.setFilter(ServiceKind.fuel);
+    controller.setFilter(ServiceKindViewModel.fuel);
     expect(
       controller.historyGroups(vehicle).single.records.single.title,
       'Fuel stop',

@@ -4,7 +4,7 @@ import '../local/models/garage_vehicle_box.dart';
 import '../local/models/service_record_box.dart';
 
 extension GarageVehicleBoxMapper on GarageVehicleBox {
-  GarageVehicle toEntity() => GarageVehicle(
+  GarageVehicleEntity toEntity() => GarageVehicleEntity(
     make: make,
     model: model,
     year: year,
@@ -19,7 +19,7 @@ extension GarageVehicleBoxMapper on GarageVehicleBox {
   );
 }
 
-extension GarageVehicleEntityMapper on GarageVehicle {
+extension GarageVehicleEntityMapper on GarageVehicleEntity {
   GarageVehicleBox toBox({int id = 0}) {
     final box = GarageVehicleBox(
       id: id,
@@ -40,7 +40,7 @@ extension GarageVehicleEntityMapper on GarageVehicle {
 }
 
 extension ServiceRecordBoxMapper on ServiceRecordBox {
-  ServiceRecord toEntity() => ServiceRecord(
+  ServiceRecordEntity toEntity() => ServiceRecordEntity(
     title: title,
     date: date,
     km: km,
@@ -51,7 +51,7 @@ extension ServiceRecordBoxMapper on ServiceRecordBox {
   );
 }
 
-extension ServiceRecordEntityMapper on ServiceRecord {
+extension ServiceRecordEntityMapper on ServiceRecordEntity {
   ServiceRecordBox toBox() => ServiceRecordBox(
     title: title,
     date: date,

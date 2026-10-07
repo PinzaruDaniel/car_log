@@ -5,13 +5,13 @@ part 'garage_vehicle.freezed.dart';
 part 'garage_vehicle.g.dart';
 
 @freezed
-abstract class GarageVehicle with _$GarageVehicle {
-  const GarageVehicle._();
+abstract class GarageVehicleEntity with _$GarageVehicleEntity {
+  const GarageVehicleEntity._();
 
   // Freezed forwards this annotation to the generated implementation.
   // ignore: invalid_annotation_target
   @JsonSerializable(explicitToJson: true)
-  const factory GarageVehicle({
+  const factory GarageVehicleEntity({
     required String make,
     required String model,
     required int year,
@@ -22,12 +22,12 @@ abstract class GarageVehicle with _$GarageVehicle {
     @Default('') String engine,
     @Default(10000) int oilInterval,
     DateTime? insuranceExpiry,
-    @Default([]) List<ServiceRecord> records,
-  }) = _GarageVehicle;
+    @Default([]) List<ServiceRecordEntity> records,
+  }) = _GarageVehicleEntity;
 
   String get title => '$make $model';
 
-  ServiceRecord? get lastOil {
+  ServiceRecordEntity? get lastOil {
     final oils = records.where((r) => r.oil).toList()
       ..sort((a, b) {
         final kmOrder = b.km.compareTo(a.km);
@@ -36,6 +36,6 @@ abstract class GarageVehicle with _$GarageVehicle {
     return oils.isEmpty ? null : oils.first;
   }
 
-  factory GarageVehicle.fromJson(Map<String, dynamic> json) =>
-      _$GarageVehicleFromJson(json);
+  factory GarageVehicleEntity.fromJson(Map<String, dynamic> json) =>
+      _$GarageVehicleEntityFromJson(json);
 }

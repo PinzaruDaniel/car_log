@@ -19,7 +19,7 @@ class GarageLocalDataSource {
   final Box<ServiceRecordBox> _records;
   final LegacyGarageLocalDataSource _legacy;
 
-  Future<GarageVehicle?> load() async {
+  Future<GarageVehicleEntity?> load() async {
     final existing = _vehicles.getAll();
     if (existing.isNotEmpty) return existing.first.toEntity();
     final legacy = await _legacy.load();
@@ -27,7 +27,7 @@ class GarageLocalDataSource {
     return legacy;
   }
 
-  Future<void> save(GarageVehicle vehicle) async {
+  Future<void> save(GarageVehicleEntity vehicle) async {
     _store.runInTransaction(TxMode.write, () {
       final existing = _vehicles.getAll();
       final previous = existing.isEmpty ? null : existing.first;

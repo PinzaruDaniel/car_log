@@ -8,13 +8,13 @@ import 'package:path_provider/path_provider.dart';
 /// The original file is retained after importing into ObjectBox.
 @lazySingleton
 class LegacyGarageLocalDataSource {
-  Future<GarageVehicle?> load() async {
+  Future<GarageVehicleEntity?> load() async {
     final directory = Platform.isMacOS
         ? await getApplicationSupportDirectory()
         : await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/garage.json');
     if (!await file.exists()) return null;
-    return GarageVehicle.fromJson(
+    return GarageVehicleEntity.fromJson(
       jsonDecode(await file.readAsString()) as Map<String, dynamic>,
     );
   }

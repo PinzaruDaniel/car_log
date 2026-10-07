@@ -3,7 +3,6 @@ import '../../../localization/localization.dart';
 import 'package:flutter/material.dart';
 import '../../../widgets/garage_button.dart';
 import 'package:flutter/services.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:smart_form_fields/smart_form_fields.dart';
 import '../../../controllers/vehicle_onboarding_controller.dart';
 import '../../../widgets/garage_widgets.dart';
@@ -16,7 +15,7 @@ class VehicleSetupSteps extends StatelessWidget {
   SmartFormController get _serviceForm => controller.serviceForm;
   TextEditingController get _vin => controller.vin;
   Map<String, TextEditingController> get _fields => controller.fields;
-  List<ServiceRecord> get _records => controller.records;
+  List<OnboardingServiceRecordViewItem> get _records => controller.records;
   Map<String, String> get _found => controller.found;
   bool get _details => controller.details.value;
   bool get _busy => controller.busy;
@@ -244,15 +243,8 @@ class VehicleSetupSteps extends StatelessWidget {
       for (final record in _records)
         ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text(recordTitle(record)),
-          subtitle: Text(
-            LocaleKeys.service_date_km.tr(
-              namedArgs: {
-                'date': displayDate(record.date),
-                'km': kilometres(record.km),
-              },
-            ),
-          ),
+          title: Text(record.title),
+          subtitle: Text(record.subtitle),
           trailing: GarageButton.icon(
             onPressed: () => controller.removeRecord(record),
             icon: Icon(Icons.close),

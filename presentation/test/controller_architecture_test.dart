@@ -7,7 +7,6 @@ import 'package:car_log/localization/localization.dart';
 import 'package:car_log/main.dart';
 import 'package:car_log/pages/main_page.dart';
 import 'package:car_log/pages/vehicle/vehicle_onboarding_page.dart';
-import 'package:car_log/widgets/garage_widgets.dart';
 import 'package:domain/features/garage/entities/garage_vehicle.dart';
 import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:domain/features/garage/repositories/garage_repository.dart';
@@ -59,11 +58,11 @@ void main() {
     },
   );
 
-  testWidgets('direct Rx writes rebuild garage without update calls', (
+  testWidgets('mapped vehicle writes rebuild garage without update calls', (
     tester,
   ) async {
     final repository = fixtures.MemoryGarage()
-      ..vehicle = const GarageVehicle(
+      ..vehicle = const GarageVehicleEntity(
         make: 'BMW',
         model: 'E39',
         year: 2002,
@@ -73,9 +72,8 @@ void main() {
     await tester.pumpWidget(fixtures.app(const MainPage()));
     await tester.pumpAndSettle();
     final timelineController = Get.find<TimelineController>();
-    controller.vehicle.value = controller.vehicle.value!.copyWith(
-      odometer: 288000,
-    );
+    repository.vehicle = repository.vehicle!.copyWith(odometer: 288000);
+    controller.acceptVehicle(repository.vehicle!);
     await tester.pumpAndSettle();
     expect(
       find.textContaining('288,000 km', findRichText: true),
@@ -96,13 +94,13 @@ void main() {
     tester,
   ) async {
     final repository = fixtures.MemoryGarage()
-      ..vehicle = GarageVehicle(
+      ..vehicle = GarageVehicleEntity(
         make: 'BMW',
         model: 'E39',
         year: 2002,
         odometer: 287450,
         records: [
-          ServiceRecord(
+          ServiceRecordEntity(
             title: LocaleKeys.oil_filters_service,
             date: DateTime(2026, 9, 1),
             km: 281900,
@@ -110,7 +108,7 @@ void main() {
             notes: LocaleKeys.oil_filter,
             oil: true,
           ),
-          ServiceRecord(
+          ServiceRecordEntity(
             title: 'My repair note',
             date: DateTime(2026, 9, 2),
             km: 287000,
@@ -135,7 +133,13 @@ void main() {
     expect(find.text('septembrie 2026'), findsOneWidget);
     expect(find.text('Schimb ulei și filtre'), findsOneWidget);
     expect(find.text('My repair note'), findsOneWidget);
-    expect(recordNotes(repository.vehicle!.records.first), 'Filtru de ulei');
+    final timelineItem = Get.find<TimelineController>().buildViewItem(
+      root.vehicle.value!,
+    );
+    final oilItem = timelineItem.groups
+        .expand((group) => group.records)
+        .firstWhere((record) => record.title == 'Schimb ulei și filtre');
+    expect(oilItem.notes, 'Filtru de ulei');
     expect(tester.takeException(), isNull);
   });
 

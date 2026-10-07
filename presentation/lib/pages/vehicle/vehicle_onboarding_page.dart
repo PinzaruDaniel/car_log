@@ -2,10 +2,10 @@ import '../../widgets/localized_obx.dart';
 import '../../localization/localization.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/garage_button.dart';
-import 'package:domain/features/garage/entities/garage_vehicle.dart';
 import '../../controllers/vehicle_onboarding_controller.dart';
 import '../../widgets/garage_widgets.dart';
 import '../../utils/app_colors.dart';
+import '../../view_models/garage_vehicle_view_model.dart';
 import 'widgets/vehicle_setup_steps.dart';
 
 class VehicleOnboardingPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class VehicleOnboardingPage extends StatefulWidget {
     super.key,
   });
   final VehicleOnboardingController? controller;
-  final ValueChanged<GarageVehicle> onSaved;
+  final ValueChanged<GarageVehicleViewModel> onSaved;
   @override
   State<VehicleOnboardingPage> createState() => _VehicleOnboardingPageState();
 }

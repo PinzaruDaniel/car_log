@@ -9,8 +9,10 @@ import 'base/base_controller.dart';
 import '../localization/localization.dart';
 import '../navigation/app_routes.dart';
 import '../pages/vehicle/widgets/odometer_dialog.dart';
+import '../view_models/garage_vehicle_view_model.dart';
 import '../widgets/service_record_editor.dart';
 import 'odometer_controller.dart';
+import 'mappers/garage_vehicle_view_model_mapper.dart';
 import 'service_record_controller.dart';
 
 /// Owns app-wide navigation and the active garage for the app's lifetime.
@@ -20,7 +22,8 @@ class MainAppController extends BaseController {
   SaveGarageUseCase get _saveGarageUseCase => getInstance<SaveGarageUseCase>();
   static const loadGarageKey = 'loadGarage', saveGarageKey = 'saveGarage';
   final error = RxnString();
-  final vehicle = Rxn<GarageVehicle>();
+  final vehicle = Rxn<GarageVehicleViewModel>();
+  GarageVehicleEntity? _vehicleEntity;
   final StreamController<int> mainTabStreamController =
       StreamController<int>.broadcast();
 
@@ -30,8 +33,10 @@ class MainAppController extends BaseController {
     if (active) mainTabStreamController.add(index);
   }
 
-  void acceptVehicle(GarageVehicle value) {
-    if (active) vehicle.value = value;
+  void acceptVehicle(GarageVehicleEntity value) {
+    if (!active) return;
+    _vehicleEntity = value;
+    vehicle.value = value.toViewModel();
   }
 
   @override
@@ -67,13 +72,14 @@ class MainAppController extends BaseController {
   }
 
   /// Called only after onboarding has persisted the first vehicle successfully.
-  void completeOnboarding(GarageVehicle vehicle) {
+  void completeOnboarding(GarageVehicleViewModel value) {
     if (!active) return;
-    acceptVehicle(vehicle);
+    _vehicleEntity = value.toEntity();
+    vehicle.value = value;
     Get.offAllNamed<void>(AppRoutes.main);
   }
 
-  Future<void> save(BuildContext context, GarageVehicle value) async {
+  Future<void> _save(BuildContext context, GarageVehicleEntity value) async {
     if (saving || !active) return;
     startLoading([saveGarageKey]);
     try {
@@ -90,20 +96,23 @@ class MainAppController extends BaseController {
     }
   }
 
-  Future<void> addRecord(BuildContext context, ServiceKind kind) async {
-    final currentVehicle = vehicle.value;
+  Future<void> addRecord(
+    BuildContext context,
+    ServiceKindViewModel kind,
+  ) async {
+    final currentVehicle = _vehicleEntity;
     if (saving || currentVehicle == null) return;
     final editor = ServiceRecordController(kind, currentVehicle.odometer);
-    final record = await showModalBottomSheet<ServiceRecord>(
+    final record = await showModalBottomSheet<ServiceRecordEntity>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       builder: (_) => ServiceRecordEditor(controller: editor),
     );
     if (record != null && active && context.mounted) {
-      final latestVehicle = vehicle.value;
+      final latestVehicle = _vehicleEntity;
       if (latestVehicle != null) {
-        await save(
+        await _save(
           context,
           latestVehicle.copyWith(records: [...latestVehicle.records, record]),
         );
@@ -112,7 +121,7 @@ class MainAppController extends BaseController {
   }
 
   Future<void> updateOdometer(BuildContext context) async {
-    final currentVehicle = vehicle.value;
+    final currentVehicle = _vehicleEntity;
     if (saving || currentVehicle == null) return;
     final editor = OdometerController(currentVehicle.odometer);
     final value = await showDialog<int>(
@@ -120,9 +129,9 @@ class MainAppController extends BaseController {
       builder: (_) => OdometerDialog(controller: editor),
     );
     if (value != null && active && context.mounted) {
-      final latestVehicle = vehicle.value;
+      final latestVehicle = _vehicleEntity;
       if (latestVehicle != null) {
-        await save(context, latestVehicle.copyWith(odometer: value));
+        await _save(context, latestVehicle.copyWith(odometer: value));
       }
     }
   }

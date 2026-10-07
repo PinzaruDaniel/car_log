@@ -26,9 +26,9 @@ class GarageRepositoryImpl implements GarageRepository {
       );
 
   @override
-  Future<GarageVehicle?> load() => _local.load();
+  Future<GarageVehicleEntity?> load() => _local.load();
   @override
-  Future<void> save(GarageVehicle vehicle) => _local.save(vehicle);
+  Future<void> save(GarageVehicleEntity vehicle) => _local.save(vehicle);
   @override
   Future<Map<String, String>> decodeVin(String vin) async =>
       (await _vinRepository.get(vin)).getOrThrow();

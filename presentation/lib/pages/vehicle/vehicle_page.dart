@@ -1,11 +1,10 @@
-import 'package:domain/features/garage/entities/garage_vehicle.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/base/imports/controller_imports.dart';
 import '../../localization/localization.dart';
 import '../../page+state/base_state.dart';
 import '../../utils/app_colors.dart';
+import '../../view_models/garage_vehicle_view_model.dart';
 import '../../widgets/garage_badge.dart';
 import '../../widgets/garage_button.dart';
 import '../../widgets/garage_widgets.dart';
@@ -21,7 +20,6 @@ class VehiclePage extends StatefulWidget {
 }
 
 class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
-  GarageVehicle? get _vehicle => mainAppController.vehicle.value;
   bool get _saving => mainAppController.saving;
 
   @override
@@ -36,11 +34,8 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
   );
 
   List<Widget> _garage(BuildContext context) {
-    final car = _vehicle!;
-    final oil = controller.lastOil(car);
-    final remaining = controller.oilRemainingKm(car);
-    final healthy = controller.oilHealthy(car);
-    final spent = controller.yearlyMaintenanceCost(car);
+    final item = controller.buildViewItem(mainAppController.vehicle.value!);
+    final oil = item.oil;
     return [
       GarageCard(
         highlight: true,
@@ -51,21 +46,21 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
               children: [
                 Expanded(
                   child: Text(
-                    car.title,
+                    item.title,
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                   ),
                 ),
                 Text(
-                  '${car.year}',
+                  item.year,
                   style: TextStyle(color: AppColors.primaryAmberLight),
                 ),
               ],
             ),
             SizedBox(height: 12),
-            if (car.body.isNotEmpty)
+            if (item.body.isNotEmpty)
               Padding(
                 padding: EdgeInsets.only(bottom: 18),
-                child: Text(car.body, style: TextStyle(color: Colors.white54)),
+                child: Text(item.body, style: TextStyle(color: Colors.white54)),
               ),
             Center(
               child: Text.rich(
@@ -75,7 +70,7 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
                       text: LocaleKeys.odometer_label.tr(),
                       style: TextStyle(color: Colors.white54),
                     ),
-                    TextSpan(text: distance(car.odometer)),
+                    TextSpan(text: item.odometer),
                   ],
                 ),
                 style: TextStyle(fontSize: 19),
@@ -100,46 +95,28 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
                   ),
                 ),
                 _badge(
-                  oil == null
-                      ? LocaleKeys.unknown.tr()
-                      : healthy
-                      ? LocaleKeys.healthy.tr()
-                      : LocaleKeys.due.tr(),
-                  healthy ? AppColors.statusGreen : AppColors.primaryAmber,
+                  oil.status,
+                  oil.healthy ? AppColors.statusGreen : AppColors.primaryAmber,
                 ),
               ],
             ),
             SizedBox(height: 20),
-            if (oil != null) ...[
+            if (oil.known) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
-                  value: controller.oilProgress(car),
+                  value: oil.progress,
                   minHeight: 9,
                   backgroundColor: Colors.white12,
                 ),
               ),
               SizedBox(height: 16),
-              _detail(
-                LocaleKeys.changed.tr(),
-                LocaleKeys.oil_changed_details.tr(
-                  namedArgs: {
-                    'km': kilometres(oil.km),
-                    'date': displayDate(oil.date),
-                  },
-                ),
-              ),
-              _detail(LocaleKeys.next.tr(), distance(oil.km + car.oilInterval)),
+              _detail(LocaleKeys.changed.tr(), oil.changedDetails!),
+              _detail(LocaleKeys.next.tr(), oil.nextChange!),
               Text(
-                remaining! >= 0
-                    ? LocaleKeys.km_remaining.tr(
-                        namedArgs: {'value': kilometres(remaining)},
-                      )
-                    : LocaleKeys.km_overdue.tr(
-                        namedArgs: {'value': kilometres(-remaining)},
-                      ),
+                oil.remaining!,
                 style: TextStyle(
-                  color: healthy
+                  color: oil.healthy
                       ? AppColors.primaryAmberLight
                       : AppColors.statusDanger,
                   fontSize: 17,
@@ -155,7 +132,7 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
                     ? null
                     : () => mainAppController.addRecord(
                         context,
-                        ServiceKind.maintenance,
+                        ServiceKindViewModel.maintenance,
                       ),
                 child: Text(LocaleKeys.log_oil.tr()),
               ),
@@ -181,20 +158,12 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
                     style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
                   ),
                 ),
-                if (car.insuranceExpiry != null)
-                  _badge(
-                    controller.insuranceStatus(car.insuranceExpiry!),
-                    AppColors.primaryAmber,
-                  ),
+                if (item.insuranceStatus != null)
+                  _badge(item.insuranceStatus!, AppColors.primaryAmber),
               ],
             ),
             SizedBox(height: 12),
-            _detail(
-              LocaleKeys.expires.tr(),
-              car.insuranceExpiry == null
-                  ? LocaleKeys.not_added.tr()
-                  : displayDate(car.insuranceExpiry!),
-            ),
+            _detail(LocaleKeys.expires.tr(), item.insuranceExpiry),
           ],
         ),
       ),
@@ -216,10 +185,10 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
               ],
             ),
             SizedBox(height: 14),
-            Text(money(spent), style: TextStyle(fontSize: 24)),
+            Text(item.yearlyMaintenanceCost, style: TextStyle(fontSize: 24)),
             Text(
               LocaleKeys.spent_year.tr(
-                namedArgs: {'year': '${DateTime.now().year}'},
+                namedArgs: {'year': item.maintenanceYear},
               ),
               style: TextStyle(color: Colors.white54),
             ),
@@ -234,13 +203,17 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
           _action(
             LocaleKeys.log_service.tr(),
             Icons.build_rounded,
-            () => mainAppController.addRecord(context, ServiceKind.maintenance),
+            () => mainAppController.addRecord(
+              context,
+              ServiceKindViewModel.maintenance,
+            ),
             _actionWidth,
           ),
           _action(
             LocaleKeys.add_fuel.tr(),
             Icons.local_gas_station_rounded,
-            () => mainAppController.addRecord(context, ServiceKind.fuel),
+            () =>
+                mainAppController.addRecord(context, ServiceKindViewModel.fuel),
             _actionWidth,
           ),
           _action(

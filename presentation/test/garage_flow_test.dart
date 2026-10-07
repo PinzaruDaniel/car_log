@@ -6,7 +6,9 @@ import 'package:car_log/navigation/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:car_log/pages/vehicle/vehicle_onboarding_page.dart';
 import 'package:car_log/pages/vehicle/vehicle_controller.dart';
+import 'package:car_log/pages/timeline/timeline_controller.dart';
 import 'package:car_log/controllers/main_app_controller.dart';
+import 'package:car_log/controllers/mappers/garage_vehicle_view_model_mapper.dart';
 import 'package:car_log/controllers/vehicle_onboarding_controller.dart';
 import 'package:car_log/controllers/service_record_controller.dart';
 import 'package:car_log/controllers/odometer_controller.dart';
@@ -33,11 +35,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:car_log/utils/service_history_pdf.dart';
+import 'package:car_log/view_models/garage_vehicle_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_form_fields/smart_form_fields.dart';
 
 class MemoryGarage implements GarageRepository {
-  GarageVehicle? vehicle;
+  GarageVehicleEntity? vehicle;
   Map<String, String> decoded = {
     'make': 'BMW',
     'model': '530i',
@@ -47,13 +50,13 @@ class MemoryGarage implements GarageRepository {
   int loads = 0;
   bool failLookup = false;
   @override
-  Future<GarageVehicle?> load() async {
+  Future<GarageVehicleEntity?> load() async {
     loads++;
     return vehicle;
   }
 
   @override
-  Future<void> save(GarageVehicle value) async => vehicle = value;
+  Future<void> save(GarageVehicleEntity value) async => vehicle = value;
   @override
   Future<Map<String, String>> decodeVin(String vin) async {
     requests++;
@@ -64,10 +67,10 @@ class MemoryGarage implements GarageRepository {
 
 class StubLegacyGarage extends LegacyGarageLocalDataSource {
   StubLegacyGarage([this.vehicle]);
-  final GarageVehicle? vehicle;
+  final GarageVehicleEntity? vehicle;
   int loads = 0;
   @override
-  Future<GarageVehicle?> load() async {
+  Future<GarageVehicleEntity?> load() async {
     loads++;
     return vehicle;
   }
@@ -186,10 +189,10 @@ void main() {
     final controller = VehicleController();
     addTearDown(controller.onDelete.call);
     expect(controller, isA<BaseController>());
-    final editor = ServiceRecordController(ServiceKind.fuel, 287450);
+    final editor = ServiceRecordController(ServiceKindViewModel.fuel, 287450);
     addTearDown(editor.onDelete.call);
     expect(editor, isA<BaseController>());
-    expect(editor.kind.value, ServiceKind.fuel);
+    expect(editor.kind.value, ServiceKindViewModel.fuel);
     expect(editor.maxKm, 287450);
     final odometer = OdometerController(287450);
     addTearDown(odometer.onDelete.call);
@@ -202,7 +205,7 @@ void main() {
     final load = GetIt.instance.get<GetGarageUseCase>();
     final save = GetIt.instance.get<SaveGarageUseCase>();
     expect(await load(), isNull);
-    const vehicle = GarageVehicle(
+    const vehicle = GarageVehicleEntity(
       make: 'BMW',
       model: 'E39',
       year: 2002,
@@ -215,23 +218,26 @@ void main() {
   });
 
   test('PDF exports complete Unicode service history offline', () async {
+    final vehicle = GarageVehicleEntity(
+      make: 'Škoda',
+      model: 'Octavia',
+      year: 2018,
+      odometer: 120000,
+      records: [
+        ServiceRecordEntity(
+          title: 'Schimb ulei — înlocuire filtru',
+          date: DateTime(2026, 9, 1),
+          km: 115000,
+          kind: ServiceKind.maintenance,
+          notes: 'Заміна фільтра',
+          oil: true,
+        ),
+      ],
+    );
+    final controller = TimelineController();
+    addTearDown(controller.onDelete.call);
     final bytes = await buildServiceHistoryPdf(
-      GarageVehicle(
-        make: 'Škoda',
-        model: 'Octavia',
-        year: 2018,
-        odometer: 120000,
-        records: [
-          ServiceRecord(
-            title: 'Schimb ulei — înlocuire filtru',
-            date: DateTime(2026, 9, 1),
-            km: 115000,
-            kind: ServiceKind.maintenance,
-            notes: 'Заміна фільтра',
-            oil: true,
-          ),
-        ],
-      ),
+      controller.buildPdfViewModel(vehicle.toViewModel()),
     );
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
     expect(bytes.length, greaterThan(1000));
@@ -262,13 +268,13 @@ void main() {
     );
     var repository = source();
     expect(await repository.load(), isNull);
-    final vehicle = GarageVehicle(
+    final vehicle = GarageVehicleEntity(
       make: 'BMW',
       model: 'E39',
       year: 2002,
       odometer: 287450,
       records: [
-        ServiceRecord(
+        ServiceRecordEntity(
           title: 'Oil + filters',
           date: DateTime(2026, 7, 1),
           km: 281900,
@@ -304,7 +310,7 @@ void main() {
     final store = await openStore(directory: directory.path);
     addTearDown(store.close);
     final legacy = StubLegacyGarage(
-      const GarageVehicle(
+      const GarageVehicleEntity(
         make: 'BMW',
         model: 'E39',
         year: 2002,
@@ -411,14 +417,14 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       final repository = MemoryGarage()
-        ..vehicle = GarageVehicle(
+        ..vehicle = GarageVehicleEntity(
           make: 'BMW',
           model: 'E39',
           year: 2002,
           odometer: 287450,
           insuranceExpiry: DateTime(2026, 12, 12),
           records: [
-            ServiceRecord(
+            ServiceRecordEntity(
               title: 'Oil + filters service',
               date: DateTime(2026, 7, 1),
               km: 281900,
@@ -427,7 +433,7 @@ void main() {
               notes: '5W-40 Synthetic · Oil filter · Air filter',
               oil: true,
             ),
-            ServiceRecord(
+            ServiceRecordEntity(
               title: 'Alternator replaced',
               date: DateTime(2026, 9, 1),
               km: 287100,

@@ -6,8 +6,8 @@ part of 'service_record.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ServiceRecord _$ServiceRecordFromJson(Map<String, dynamic> json) =>
-    _ServiceRecord(
+_ServiceRecordEntity _$ServiceRecordEntityFromJson(Map<String, dynamic> json) =>
+    _ServiceRecordEntity(
       title: json['title'] as String,
       date: DateTime.parse(json['date'] as String),
       km: (json['km'] as num).toInt(),
@@ -17,16 +17,17 @@ _ServiceRecord _$ServiceRecordFromJson(Map<String, dynamic> json) =>
       oil: json['oil'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$ServiceRecordToJson(_ServiceRecord instance) =>
-    <String, dynamic>{
-      'title': instance.title,
-      'date': instance.date.toIso8601String(),
-      'km': instance.km,
-      'kind': _$ServiceKindEnumMap[instance.kind]!,
-      'cost': instance.cost,
-      'notes': instance.notes,
-      'oil': instance.oil,
-    };
+Map<String, dynamic> _$ServiceRecordEntityToJson(
+  _ServiceRecordEntity instance,
+) => <String, dynamic>{
+  'title': instance.title,
+  'date': instance.date.toIso8601String(),
+  'km': instance.km,
+  'kind': _$ServiceKindEnumMap[instance.kind]!,
+  'cost': instance.cost,
+  'notes': instance.notes,
+  'oil': instance.oil,
+};
 
 const _$ServiceKindEnumMap = {
   ServiceKind.maintenance: 'maintenance',

@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:domain/features/garage/entities/garage_vehicle.dart';
 import '../timeline_controller.dart';
 import '../../../utils/app_colors.dart';
-import '../../../widgets/garage_widgets.dart';
 import 'service_history_card.dart';
 
 class ServiceHistoryTimeline extends StatelessWidget {
-  const ServiceHistoryTimeline({
-    required this.controller,
-    required this.vehicle,
-    super.key,
-  });
-  final TimelineController controller;
-  final GarageVehicle vehicle;
+  const ServiceHistoryTimeline({required this.groups, super.key});
+  final List<TimelineGroupViewItem> groups;
 
   @override
   Widget build(BuildContext context) {
-    final groups = controller.historyGroups(vehicle);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -42,9 +34,7 @@ class ServiceHistoryTimeline extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  displayMonth(
-                    DateTime(groups[index].year, groups[index].month),
-                  ),
+                  groups[index].monthLabel,
                   style: const TextStyle(color: Colors.white60, fontSize: 18),
                 ),
               ),
@@ -62,10 +52,7 @@ class ServiceHistoryTimeline extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 50, bottom: 24),
-                  child: ServiceHistoryCard(
-                    record: record,
-                    tags: controller.historyTags(record),
-                  ),
+                  child: ServiceHistoryCard(record: record),
                 ),
               ],
             ),

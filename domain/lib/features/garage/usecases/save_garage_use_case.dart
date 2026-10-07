@@ -4,10 +4,11 @@ import '../entities/garage_vehicle.dart';
 import '../repositories/garage_repository.dart';
 
 @injectable
-class SaveGarageUseCase extends FutureUseCase<void, GarageVehicle> {
+class SaveGarageUseCase extends FutureUseCase<void, GarageVehicleEntity> {
   const SaveGarageUseCase(this._repository);
   final GarageRepository _repository;
 
   @override
-  Future<void> execute(GarageVehicle vehicle) => _repository.save(vehicle);
+  Future<void> execute(GarageVehicleEntity vehicle) =>
+      _repository.save(vehicle);
 }

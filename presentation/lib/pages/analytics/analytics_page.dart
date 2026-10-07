@@ -1,7 +1,5 @@
 import '../../widgets/localized_obx.dart';
 import '../../localization/localization.dart';
-import 'package:domain/features/garage/entities/garage_vehicle.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/base/imports/controller_imports.dart';
 import '../../page+state/base_state.dart';
@@ -23,22 +21,19 @@ class _AnalyticsPageState
 
   @override
   Widget build(BuildContext context) => LocalizedObx(() {
-    final vehicle = mainAppController.vehicle.value!;
+    final item = controller.buildViewItem(mainAppController.vehicle.value!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: _analytics(controller, vehicle),
+      children: _analytics(item),
     );
   });
 
-  List<Widget> _analytics(
-    AnalyticsController controller,
-    GarageVehicle vehicle,
-  ) => [
+  List<Widget> _analytics(AnalyticsViewItem item) => [
     SectionTitle(
       LocaleKeys.analytics_title.tr(),
       subtitle: LocaleKeys.analytics_description.tr(),
     ),
-    for (final kind in ServiceKind.values)
+    for (final category in item.categories)
       Padding(
         padding: EdgeInsets.only(bottom: 16),
         child: GarageCard(
@@ -46,7 +41,7 @@ class _AnalyticsPageState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                categoryLabel(kind).toUpperCase(),
+                category.label,
                 style: TextStyle(
                   color: AppColors.primaryAmber,
                   letterSpacing: 2,
@@ -54,15 +49,11 @@ class _AnalyticsPageState
               ),
               SizedBox(height: 16),
               Text(
-                money(controller.totalCost(vehicle, kind)),
+                category.cost,
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
               ),
               Text(
-                LocaleKeys.records_count.tr(
-                  namedArgs: {
-                    'count': '${controller.recordCount(vehicle, kind)}',
-                  },
-                ),
+                category.recordCount,
                 style: TextStyle(color: Colors.white54),
               ),
             ],

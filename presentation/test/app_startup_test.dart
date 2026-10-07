@@ -16,16 +16,16 @@ import 'garage_flow_test.dart' as fixtures;
 
 class StartupGarage extends fixtures.MemoryGarage {
   bool failLoad = false;
-  Completer<GarageVehicle?>? pending;
+  Completer<GarageVehicleEntity?>? pending;
   @override
-  Future<GarageVehicle?> load() async {
+  Future<GarageVehicleEntity?> load() async {
     loads++;
     if (failLoad) throw StateError('Cache unavailable');
     return pending == null ? vehicle : pending!.future;
   }
 }
 
-const car = GarageVehicle(
+const car = GarageVehicleEntity(
   make: 'BMW',
   model: 'E39',
   year: 2002,
@@ -69,7 +69,7 @@ void main() {
       RootBinding().dependencies();
       expect(Get.find<MainAppController>(), same(root));
       expect(repository.loads, 1);
-      expect(Get.find<MainAppController>().vehicle.value, car);
+      expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
       expect(Get.key.currentState!.canPop(), false);
     },
   );
@@ -105,14 +105,14 @@ void main() {
       await tester.pumpAndSettle();
       expect(Get.currentRoute, AppRoutes.main);
       expect(repository.loads, 2);
-      expect(Get.find<MainAppController>().vehicle.value, car);
+      expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
     },
   );
 
   testWidgets('pending cache read shows loading and rejects duplicate reads', (
     tester,
   ) async {
-    repository.pending = Completer<GarageVehicle?>();
+    repository.pending = Completer<GarageVehicleEntity?>();
     await tester.pumpWidget(fixtures.localized(const CarLogApp()));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -127,7 +127,7 @@ void main() {
   });
 
   testWidgets('root shutdown ignores pending cache result', (tester) async {
-    repository.pending = Completer<GarageVehicle?>();
+    repository.pending = Completer<GarageVehicleEntity?>();
     await tester.pumpWidget(fixtures.localized(const CarLogApp()));
     await tester.pump();
     final controller = Get.find<MainAppController>();
