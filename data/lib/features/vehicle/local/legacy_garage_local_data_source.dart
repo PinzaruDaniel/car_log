@@ -9,7 +9,9 @@ import 'package:path_provider/path_provider.dart';
 @lazySingleton
 class LegacyGarageLocalDataSource {
   Future<GarageVehicle?> load() async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = Platform.isMacOS
+        ? await getApplicationSupportDirectory()
+        : await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/garage.json');
     if (!await file.exists()) return null;
     return GarageVehicle.fromJson(

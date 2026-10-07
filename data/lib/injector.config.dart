@@ -84,6 +84,9 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i45.VehicleRemoteDataSource(gh<_i361.Dio>(instanceName: 'main_dio')),
     );
+    gh.lazySingleton<_i874.VinRemoteDataSource>(
+      () => _i874.VinRemoteDataSource(gh<_i361.Dio>(instanceName: 'vin_dio')),
+    );
     gh.lazySingleton<_i95.VehicleLocalDataSource>(
       () => _i95.VehicleLocalDataSourceImpl(gh<_i1034.Box<_i957.VehicleBox>>()),
     );
@@ -94,9 +97,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1034.Box<_i208.ServiceRecordBox>>(),
         gh<_i927.LegacyGarageLocalDataSource>(),
       ),
-    );
-    gh.lazySingleton<_i874.VinRemoteDataSource>(
-      () => _i874.VinRemoteDataSource(gh<_i361.Dio>(instanceName: 'vin_dio')),
     );
     gh.lazySingleton<_i1011.AuthLocalDataSource>(
       () => _i1011.AuthLocalDataSourceImpl(gh<_i1034.Box<_i72.AuthBox>>()),

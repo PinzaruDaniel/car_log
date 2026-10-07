@@ -33,6 +33,7 @@ dependencies:
   add_to_google_wallet: ^0.0.5
   flutter_wallet_kit: ^0.0.1
 dev_dependencies:
+  dio: ^5.10.0
   shared_preferences: ^2.5.5
   flutter_test:
     sdk: flutter

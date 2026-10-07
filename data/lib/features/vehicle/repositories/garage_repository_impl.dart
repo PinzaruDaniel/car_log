@@ -3,6 +3,7 @@ import 'package:domain/features/garage/repositories/garage_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:smart_repository/smart_repository.dart';
 import '../local/garage_local_data_source.dart';
+import '../mappers/vin_mapper.dart';
 import '../remote/vin_remote_data_source.dart';
 
 @LazySingleton(as: GarageRepository)
@@ -13,7 +14,8 @@ class GarageRepositoryImpl implements GarageRepository {
   final _vinCache = <String, Map<String, String>>{};
   late final _vinRepository =
       SmartRepositoryFamily<String, Map<String, String>>(
-        remote: _remote.decodeVin,
+        remote: (vin) async =>
+            (await _remote.decodeVin(vin)).toVehicleDetails(),
         local: (vin) => _vinCache[vin],
         saveLocal: (vin, details) => _vinCache[vin] = details,
         shouldPersist: (_, details) =>
