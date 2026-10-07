@@ -4,9 +4,7 @@ import '../../view_models/garage_vehicle_view_model.dart';
 import '../../widgets/garage_widgets.dart';
 
 class AnalyticsController extends BaseController {
-  AnalyticsViewItem buildViewItem(
-    GarageVehicleViewModel vehicle,
-  ) => AnalyticsViewItem(
+  AnalyticsViewItem buildViewItem(GarageVehicleViewModel vehicle) => AnalyticsViewItem(
     categories: ServiceKindViewModel.values
         .map(
           (kind) => AnalyticsCategoryViewItem(
@@ -16,15 +14,10 @@ class AnalyticsController extends BaseController {
               ServiceKindViewModel.fuel => LocaleKeys.fuel.tr(),
             }.toUpperCase(),
             cost: money(
-              vehicle.records
-                  .where((record) => record.kind == kind)
-                  .fold(0.0, (sum, record) => sum + record.cost),
+              vehicle.records.where((record) => record.kind == kind).fold(0.0, (sum, record) => sum + record.cost),
             ),
             recordCount: LocaleKeys.records_count.tr(
-              namedArgs: {
-                'count':
-                    '${vehicle.records.where((record) => record.kind == kind).length}',
-              },
+              namedArgs: {'count': '${vehicle.records.where((record) => record.kind == kind).length}'},
             ),
           ),
         )
@@ -39,11 +32,7 @@ class AnalyticsViewItem {
 }
 
 class AnalyticsCategoryViewItem {
-  const AnalyticsCategoryViewItem({
-    required this.label,
-    required this.cost,
-    required this.recordCount,
-  });
+  const AnalyticsCategoryViewItem({required this.label, required this.cost, required this.recordCount});
 
   final String label;
   final String cost;

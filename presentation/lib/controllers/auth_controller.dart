@@ -24,54 +24,30 @@ class AuthController extends BaseController {
     formFieldViewItems.value = [
       SmartTextFieldViewItem(
         name: 'make',
-        decoration: InputDecoration(
-          labelText: LocaleKeys.make.tr(),
-          hintText: LocaleKeys.make_hint.tr(),
-        ),
+        decoration: InputDecoration(labelText: LocaleKeys.make.tr(), hintText: LocaleKeys.make_hint.tr()),
         validators: [
-          SmartValidators.required(
-            message: LocaleKeys.required_field.tr(
-              namedArgs: {'label': LocaleKeys.make.tr()},
-            ),
-          ),
+          SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': LocaleKeys.make.tr()})),
         ],
       ),
       SmartTextFieldViewItem(
         name: 'model',
-        decoration: InputDecoration(
-          labelText: LocaleKeys.model.tr(),
-          hintText: LocaleKeys.model_hint.tr(),
-        ),
+        decoration: InputDecoration(labelText: LocaleKeys.model.tr(), hintText: LocaleKeys.model_hint.tr()),
         validators: [
-          SmartValidators.required(
-            message: LocaleKeys.required_field.tr(
-              namedArgs: {'label': LocaleKeys.model.tr()},
-            ),
-          ),
+          SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': LocaleKeys.model.tr()})),
         ],
       ),
       SmartTextFieldViewItem(
         name: 'year',
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          labelText: LocaleKeys.year.tr(),
-          hintText: LocaleKeys.year_hint.tr(),
-        ),
+        decoration: InputDecoration(labelText: LocaleKeys.year.tr(), hintText: LocaleKeys.year_hint.tr()),
         validators: [
-          SmartValidators.required(
-            message: LocaleKeys.required_field.tr(
-              namedArgs: {'label': LocaleKeys.year.tr()},
-            ),
-          ),
+          SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': LocaleKeys.year.tr()})),
           SmartValidators.number(message: LocaleKeys.valid_year.tr()),
         ],
       ),
       SmartTextFieldViewItem(
         name: 'body_type',
-        decoration: InputDecoration(
-          labelText: LocaleKeys.body_type.tr(),
-          hintText: LocaleKeys.body_hint.tr(),
-        ),
+        decoration: InputDecoration(labelText: LocaleKeys.body_type.tr(), hintText: LocaleKeys.body_hint.tr()),
       ),
     ];
   }

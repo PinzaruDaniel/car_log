@@ -34,40 +34,30 @@ void main() {
     await GetIt.instance.reset();
   });
 
-  test(
-    'pending ids isolate operations and always clear after failure',
-    () async {
-      final controller = TestController();
-      addTearDown(controller.onDelete.call);
-      final load = Completer<int>(), save = Completer<int>();
-      final loadFuture = controller.runPending('load', () => load.future);
-      final saveFuture = controller.runPending('save', () => save.future);
-      expect(controller.getPendingKeys, containsAll(['load', 'save']));
-      load.complete(1);
-      expect(await loadFuture, 1);
-      expect(controller.containPendingKey('load'), false);
-      expect(controller.containPendingKey('save'), true);
-      final failure = expectLater(saveFuture, throwsStateError);
-      save.completeError(StateError('Storage unavailable'));
-      await failure;
-      expect(controller.getPendingKeys, isEmpty);
-      controller.startLoading(['load', 'load']);
-      expect(controller.getPendingKeys, ['load']);
-      controller.onDelete();
-      expect(controller.getPendingKeys, isEmpty);
-    },
-  );
+  test('pending ids isolate operations and always clear after failure', () async {
+    final controller = TestController();
+    addTearDown(controller.onDelete.call);
+    final load = Completer<int>(), save = Completer<int>();
+    final loadFuture = controller.runPending('load', () => load.future);
+    final saveFuture = controller.runPending('save', () => save.future);
+    expect(controller.getPendingKeys, containsAll(['load', 'save']));
+    load.complete(1);
+    expect(await loadFuture, 1);
+    expect(controller.containPendingKey('load'), false);
+    expect(controller.containPendingKey('save'), true);
+    final failure = expectLater(saveFuture, throwsStateError);
+    save.completeError(StateError('Storage unavailable'));
+    await failure;
+    expect(controller.getPendingKeys, isEmpty);
+    controller.startLoading(['load', 'load']);
+    expect(controller.getPendingKeys, ['load']);
+    controller.onDelete();
+    expect(controller.getPendingKeys, isEmpty);
+  });
 
-  testWidgets('mapped vehicle writes rebuild garage without update calls', (
-    tester,
-  ) async {
+  testWidgets('mapped vehicle writes rebuild garage without update calls', (tester) async {
     final repository = fixtures.MemoryGarage()
-      ..vehicle = const GarageVehicleEntity(
-        make: 'BMW',
-        model: 'E39',
-        year: 2002,
-        odometer: 287450,
-      );
+      ..vehicle = const GarageVehicleEntity(make: 'BMW', model: 'E39', year: 2002, odometer: 287450);
     final controller = fixtures.mainController(repository);
     await tester.pumpWidget(fixtures.app(const MainPage()));
     await tester.pumpAndSettle();
@@ -75,10 +65,7 @@ void main() {
     repository.vehicle = repository.vehicle!.copyWith(odometer: 288000);
     controller.acceptVehicle(repository.vehicle!);
     await tester.pumpAndSettle();
-    expect(
-      find.textContaining('288,000 km', findRichText: true),
-      findsOneWidget,
-    );
+    expect(find.textContaining('288,000 km', findRichText: true), findsOneWidget);
     controller.changeMainTab(1);
     await tester.pumpAndSettle();
     expect(find.text('No records in this category.'), findsOneWidget);
@@ -90,9 +77,7 @@ void main() {
     expect(find.text('Export PDF'), findsOneWidget);
   });
 
-  testWidgets('language switch retains root controller and cached history', (
-    tester,
-  ) async {
+  testWidgets('language switch retains root controller and cached history', (tester) async {
     final repository = fixtures.MemoryGarage()
       ..vehicle = GarageVehicleEntity(
         make: 'BMW',
@@ -133,9 +118,7 @@ void main() {
     expect(find.text('septembrie 2026'), findsOneWidget);
     expect(find.text('Schimb ulei și filtre'), findsOneWidget);
     expect(find.text('My repair note'), findsOneWidget);
-    final timelineItem = Get.find<TimelineController>().buildViewItem(
-      root.vehicle.value!,
-    );
+    final timelineItem = Get.find<TimelineController>().buildViewItem(root.vehicle.value!);
     final oilItem = timelineItem.groups
         .expand((group) => group.records)
         .firstWhere((record) => record.title == 'Schimb ulei și filtre');
@@ -143,9 +126,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Romanian onboarding validation and VIN errors are localized', (
-    tester,
-  ) async {
+  testWidgets('Romanian onboarding validation and VIN errors are localized', (tester) async {
     GetIt.instance.registerSingleton<GarageRepository>(fixtures.MemoryGarage());
     domain_di.configureDependencies(GetIt.instance);
     await tester.pumpWidget(
@@ -165,21 +146,14 @@ void main() {
     expect(find.text('Adaugă mașina ta.'), findsOneWidget);
     await tester.tap(find.text('Găsește mașina'));
     await tester.pumpAndSettle();
-    expect(
-      find.text('Introdu un VIN de 17 caractere, fără I, O sau Q.'),
-      findsOneWidget,
-    );
+    expect(find.text('Introdu un VIN de 17 caractere, fără I, O sau Q.'), findsOneWidget);
     expect(find.text('Se caută mașina…'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
   test('translation assets have matching keys and placeholders', () async {
-    final en =
-        jsonDecode(await rootBundle.loadString('assets/localization/en.json'))
-            as Map<String, dynamic>;
-    final ro =
-        jsonDecode(await rootBundle.loadString('assets/localization/ro.json'))
-            as Map<String, dynamic>;
+    final en = jsonDecode(await rootBundle.loadString('assets/localization/en.json')) as Map<String, dynamic>;
+    final ro = jsonDecode(await rootBundle.loadString('assets/localization/ro.json')) as Map<String, dynamic>;
     expect(ro.keys.toSet(), en.keys.toSet());
     for (final key in en.keys) {
       final parameters = RegExp(r'\{\w+\}');

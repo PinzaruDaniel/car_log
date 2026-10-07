@@ -24,8 +24,7 @@ class MainAppController extends BaseController {
   final error = RxnString();
   final vehicle = Rxn<GarageVehicleViewModel>();
   GarageVehicleEntity? _vehicleEntity;
-  final StreamController<int> mainTabStreamController =
-      StreamController<int>.broadcast();
+  final StreamController<int> mainTabStreamController = StreamController<int>.broadcast();
 
   bool get saving => containPendingKey(saveGarageKey);
 
@@ -50,10 +49,7 @@ class MainAppController extends BaseController {
     error.value = null;
     try {
       // Repository.load reads ObjectBox, including the one-time legacy import.
-      final vehicle = await launchUseCaseNoParams(
-        _getGarageUseCase,
-        loadGarageKey,
-      );
+      final vehicle = await launchUseCaseNoParams(_getGarageUseCase, loadGarageKey);
       // Localization delegates may delay Navigator's first mounted frame.
       while (active && Get.key.currentState == null) {
         await WidgetsBinding.instance.endOfFrame;
@@ -87,19 +83,14 @@ class MainAppController extends BaseController {
       acceptVehicle(value);
     } catch (_) {
       if (active && context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(LocaleKeys.save_error.tr())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.save_error.tr())));
       }
     } finally {
       stopLoading([saveGarageKey]);
     }
   }
 
-  Future<void> addRecord(
-    BuildContext context,
-    ServiceKindViewModel kind,
-  ) async {
+  Future<void> addRecord(BuildContext context, ServiceKindViewModel kind) async {
     final currentVehicle = _vehicleEntity;
     if (saving || currentVehicle == null) return;
     final editor = ServiceRecordController(kind, currentVehicle.odometer);
@@ -112,10 +103,7 @@ class MainAppController extends BaseController {
     if (record != null && active && context.mounted) {
       final latestVehicle = _vehicleEntity;
       if (latestVehicle != null) {
-        await _save(
-          context,
-          latestVehicle.copyWith(records: [...latestVehicle.records, record]),
-        );
+        await _save(context, latestVehicle.copyWith(records: [...latestVehicle.records, record]));
       }
     }
   }

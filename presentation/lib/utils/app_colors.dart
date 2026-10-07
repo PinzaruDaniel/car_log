@@ -26,11 +26,7 @@ final ThemeData carTrackerDarkTheme = ThemeData(
     style: FilledButton.styleFrom(
       minimumSize: const Size(0, 52),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      textStyle: const TextStyle(
-        fontFamily: 'NotoSans',
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-      ),
+      textStyle: const TextStyle(fontFamily: 'NotoSans', fontSize: 16, fontWeight: FontWeight.w600),
     ),
   ),
   colorScheme: const ColorScheme.dark(

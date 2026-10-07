@@ -12,8 +12,8 @@ class VehicleRepositoryImpl implements VehicleRepository {
   const VehicleRepositoryImpl({
     required VehicleRemoteDataSource remoteDataSource,
     required VehicleLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   final VehicleRemoteDataSource _remoteDataSource;
   final VehicleLocalDataSource _localDataSource;
@@ -23,7 +23,9 @@ class VehicleRepositoryImpl implements VehicleRepository {
     try {
       final items = await _remoteDataSource.getItems();
       await _localDataSource.cacheItems(items);
-      return right(items.map((item) => item.toEntity()).toList(growable: false));
+      return right(
+        items.map((item) => item.toEntity()).toList(growable: false),
+      );
     } catch (error) {
       return left(Failure(error.toString()));
     }

@@ -13,8 +13,7 @@ final _translations = <String, Map<String, dynamic>>{};
 class TestLocalizationLoader extends AssetLoader {
   const TestLocalizationLoader();
   @override
-  Future<Map<String, dynamic>> load(String path, Locale locale) =>
-      Future.value(_translations[locale.languageCode]!);
+  Future<Map<String, dynamic>> load(String path, Locale locale) => Future.value(_translations[locale.languageCode]!);
 }
 
 Future<void> initializeTestLocalization() async {
@@ -26,24 +25,17 @@ Future<void> initializeTestLocalization() async {
   Intl.defaultLocale = 'en';
   for (final language in ['en', 'ro']) {
     _translations[language] =
-        jsonDecode(
-              await rootBundle.loadString('assets/localization/$language.json'),
-            )
-            as Map<String, dynamic>;
+        jsonDecode(await rootBundle.loadString('assets/localization/$language.json')) as Map<String, dynamic>;
   }
-  Localization.load(
-    const Locale('en'),
-    translations: Translations(_translations['en']),
-  );
+  Localization.load(const Locale('en'), translations: Translations(_translations['en']));
 }
 
-Widget localized(Widget child, {Locale locale = const Locale('en')}) =>
-    EasyLocalization(
-      supportedLocales: LocalizationLoader.supportedLocales,
-      fallbackLocale: LocalizationLoader.fallbackLocale,
-      startLocale: locale,
-      saveLocale: false,
-      path: LocalizationLoader.path,
-      assetLoader: const TestLocalizationLoader(),
-      child: child,
-    );
+Widget localized(Widget child, {Locale locale = const Locale('en')}) => EasyLocalization(
+  supportedLocales: LocalizationLoader.supportedLocales,
+  fallbackLocale: LocalizationLoader.fallbackLocale,
+  startLocale: locale,
+  saveLocale: false,
+  path: LocalizationLoader.path,
+  assetLoader: const TestLocalizationLoader(),
+  child: child,
+);

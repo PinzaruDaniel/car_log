@@ -6,22 +6,11 @@ import '../../widgets/garage_widgets.dart';
 class VehicleController extends BaseController {
   VehicleViewItem buildViewItem(GarageVehicleViewModel vehicle) {
     final lastOil = _lastOil(vehicle);
-    final remainingKm = lastOil == null
-        ? null
-        : lastOil.km + vehicle.oilInterval - vehicle.odometer;
+    final remainingKm = lastOil == null ? null : lastOil.km + vehicle.oilInterval - vehicle.odometer;
     final oilHealthy = remainingKm != null && remainingKm > 0;
-    final progress = lastOil == null
-        ? 0.0
-        : ((vehicle.odometer - lastOil.km) / vehicle.oilInterval).clamp(
-            0.0,
-            1.0,
-          );
+    final progress = lastOil == null ? 0.0 : ((vehicle.odometer - lastOil.km) / vehicle.oilInterval).clamp(0.0, 1.0);
     final yearlyMaintenanceCost = vehicle.records
-        .where(
-          (record) =>
-              record.date.year == DateTime.now().year &&
-              record.kind != ServiceKindViewModel.fuel,
-        )
+        .where((record) => record.date.year == DateTime.now().year && record.kind != ServiceKindViewModel.fuel)
         .fold(0.0, (sum, record) => sum + record.cost);
 
     return VehicleViewItem(
@@ -41,27 +30,16 @@ class VehicleController extends BaseController {
         changedDetails: lastOil == null
             ? null
             : LocaleKeys.oil_changed_details.tr(
-                namedArgs: {
-                  'km': kilometres(lastOil.km),
-                  'date': displayDate(lastOil.date),
-                },
+                namedArgs: {'km': kilometres(lastOil.km), 'date': displayDate(lastOil.date)},
               ),
-        nextChange: lastOil == null
-            ? null
-            : distance(lastOil.km + vehicle.oilInterval),
+        nextChange: lastOil == null ? null : distance(lastOil.km + vehicle.oilInterval),
         remaining: remainingKm == null
             ? null
             : remainingKm >= 0
-            ? LocaleKeys.km_remaining.tr(
-                namedArgs: {'value': kilometres(remainingKm)},
-              )
-            : LocaleKeys.km_overdue.tr(
-                namedArgs: {'value': kilometres(-remainingKm)},
-              ),
+            ? LocaleKeys.km_remaining.tr(namedArgs: {'value': kilometres(remainingKm)})
+            : LocaleKeys.km_overdue.tr(namedArgs: {'value': kilometres(-remainingKm)}),
       ),
-      insuranceStatus: vehicle.insuranceExpiry == null
-          ? null
-          : _insuranceStatus(vehicle.insuranceExpiry!),
+      insuranceStatus: vehicle.insuranceExpiry == null ? null : _insuranceStatus(vehicle.insuranceExpiry!),
       insuranceExpiry: vehicle.insuranceExpiry == null
           ? LocaleKeys.not_added.tr()
           : displayDate(vehicle.insuranceExpiry!),

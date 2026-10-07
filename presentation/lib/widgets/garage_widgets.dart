@@ -7,15 +7,9 @@ import '../utils/app_colors.dart';
 String kilometres(int value) => NumberFormat.decimalPattern().format(value);
 String displayDate(DateTime value) => DateFormat('d MMM y').format(value);
 String displayMonth(DateTime value) => DateFormat('MMMM y').format(value);
-String distance(int value) =>
-    LocaleKeys.km.tr(namedArgs: {'value': kilometres(value)});
-String money(num value, {int decimals = 2}) => LocaleKeys.money.tr(
-  namedArgs: {
-    'value': NumberFormat.decimalPatternDigits(
-      decimalDigits: decimals,
-    ).format(value),
-  },
-);
+String distance(int value) => LocaleKeys.km.tr(namedArgs: {'value': kilometres(value)});
+String money(num value, {int decimals = 2}) =>
+    LocaleKeys.money.tr(namedArgs: {'value': NumberFormat.decimalPatternDigits(decimalDigits: decimals).format(value)});
 String filterLabel(String value) =>
     const [
       LocaleKeys.oil_filter,
@@ -40,9 +34,7 @@ class GarageCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: highlight
-              ? AppColors.primaryAmber.withValues(alpha: .5)
-              : Colors.white.withValues(alpha: .13),
+          color: highlight ? AppColors.primaryAmber.withValues(alpha: .5) : Colors.white.withValues(alpha: .13),
         ),
       ),
       child: child,
@@ -87,20 +79,10 @@ class SectionTitle extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -.6,
-          ),
-        ),
+        Text(title, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -.6)),
         if (subtitle != null) ...[
           const SizedBox(height: 8),
-          Text(
-            subtitle!,
-            style: const TextStyle(color: Colors.white60, height: 1.5),
-          ),
+          Text(subtitle!, style: const TextStyle(color: Colors.white60, height: 1.5)),
         ],
       ],
     ),

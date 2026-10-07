@@ -27,14 +27,9 @@ void main() {
       ),
     );
 
-    final response = await VinRemoteDataSource(
-      dio,
-    ).decodeVin('WBAEV53452KM12345');
+    final response = await VinRemoteDataSource(dio).decodeVin('WBAEV53452KM12345');
 
-    expect(
-      request?.uri.path,
-      '/api/vehicles/DecodeVinValues/WBAEV53452KM12345',
-    );
+    expect(request?.uri.path, '/api/vehicles/DecodeVinValues/WBAEV53452KM12345');
     expect(request?.queryParameters, {'format': 'json'});
     expect(response.results.single.make, 'BMW');
   });

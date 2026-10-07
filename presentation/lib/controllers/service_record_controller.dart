@@ -7,8 +7,7 @@ import 'package:smart_form_fields/smart_form_fields.dart';
 import '../view_models/garage_vehicle_view_model.dart';
 
 class ServiceRecordController extends BaseController {
-  ServiceRecordController(ServiceKindViewModel initialKind, this.maxKm)
-    : kind = initialKind.obs;
+  ServiceRecordController(ServiceKindViewModel initialKind, this.maxKm) : kind = initialKind.obs;
   final int? maxKm;
   final form = SmartFormController();
   final title = TextEditingController(),
@@ -19,35 +18,18 @@ class ServiceRecordController extends BaseController {
   final date = DateTime.now().obs;
   final oil = false.obs;
   List<SmartValidator> get titleValidators => [
-    SmartValidators.required(
-      message: LocaleKeys.required_field.tr(
-        namedArgs: {'label': LocaleKeys.what_done.tr()},
-      ),
-    ),
+    SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': LocaleKeys.what_done.tr()})),
   ];
   List<SmartValidator> get kmValidators => [
-    SmartValidators.required(
-      message: LocaleKeys.required_field.tr(
-        namedArgs: {'label': LocaleKeys.at_km.tr()},
-      ),
-    ),
+    SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': LocaleKeys.at_km.tr()})),
     SmartValidators.number(message: LocaleKeys.invalid_number.tr()),
-    SmartValidators.min(
-      0,
-      message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '0'}),
-    ),
+    SmartValidators.min(0, message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '0'})),
     if (maxKm != null)
-      SmartValidators.max(
-        maxKm!,
-        message: LocaleKeys.maximum_value.tr(namedArgs: {'value': '$maxKm'}),
-      ),
+      SmartValidators.max(maxKm!, message: LocaleKeys.maximum_value.tr(namedArgs: {'value': '$maxKm'})),
   ];
   List<SmartValidator> get costValidators => [
     SmartValidators.number(message: LocaleKeys.invalid_number.tr()),
-    SmartValidators.min(
-      0,
-      message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '0'}),
-    ),
+    SmartValidators.min(0, message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '0'})),
   ];
   List<ServiceKindOptionViewItem> get kindItems => ServiceKindViewModel.values
       .map(

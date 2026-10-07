@@ -4,12 +4,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../generated/garage_assets.dart';
 
-Future<Uint8List> buildServiceHistoryPdf(
-  ServiceHistoryPdfViewModel item,
-) async {
-  final font = pw.Font.ttf(
-    await rootBundle.load(AppAssets.notosansRegular.path),
-  );
+Future<Uint8List> buildServiceHistoryPdf(ServiceHistoryPdfViewModel item) async {
+  final font = pw.Font.ttf(await rootBundle.load(AppAssets.notosansRegular.path));
   final pdf = pw.Document(
     theme: pw.ThemeData.withFont(base: font, bold: font),
   );
@@ -22,10 +18,7 @@ Future<Uint8List> buildServiceHistoryPdf(
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text(
-              item.title,
-              style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold),
-            ),
+            pw.Text(item.title, style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold)),
             pw.Text(item.vehicleSummary),
             if (item.vin != null) pw.Text(item.vin!),
           ],
@@ -34,12 +27,7 @@ Future<Uint8List> buildServiceHistoryPdf(
       footer: (context) => pw.Align(
         alignment: pw.Alignment.centerRight,
         child: pw.Text(
-          LocaleKeys.pdf_footer.tr(
-            namedArgs: {
-              'page': '${context.pageNumber}',
-              'total': '${context.pagesCount}',
-            },
-          ),
+          LocaleKeys.pdf_footer.tr(namedArgs: {'page': '${context.pageNumber}', 'total': '${context.pagesCount}'}),
           style: pw.TextStyle(fontSize: 9),
         ),
       ),
@@ -56,19 +44,10 @@ Future<Uint8List> buildServiceHistoryPdf(
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text(
-                  record.title,
-                  style: pw.TextStyle(
-                    fontSize: 15,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
+                pw.Text(record.title, style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
                 pw.Text(record.summary),
-                if (record.notes != null) ...[
-                  pw.SizedBox(height: 8),
-                  pw.Text(record.notes!),
-                ],
+                if (record.notes != null) ...[pw.SizedBox(height: 8), pw.Text(record.notes!)],
               ],
             ),
           ),
@@ -95,11 +74,7 @@ class ServiceHistoryPdfViewModel {
 }
 
 class ServiceHistoryPdfRecordViewItem {
-  const ServiceHistoryPdfRecordViewItem({
-    required this.title,
-    required this.summary,
-    required this.notes,
-  });
+  const ServiceHistoryPdfRecordViewItem({required this.title, required this.summary, required this.notes});
 
   final String title;
   final String summary;

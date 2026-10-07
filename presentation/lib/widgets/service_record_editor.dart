@@ -38,34 +38,19 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      LocalizedObx(() => buildEditor(context));
+  Widget build(BuildContext context) => LocalizedObx(() => buildEditor(context));
   Widget buildEditor(BuildContext context) => Padding(
-    padding: EdgeInsets.fromLTRB(
-      24,
-      24,
-      24,
-      MediaQuery.viewInsetsOf(context).bottom + 24,
-    ),
+    padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.viewInsetsOf(context).bottom + 24),
     child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionTitle(
-            _kind == ServiceKindViewModel.fuel
-                ? LocaleKeys.add_fuel.tr()
-                : LocaleKeys.log_service.tr(),
-          ),
+          SectionTitle(_kind == ServiceKindViewModel.fuel ? LocaleKeys.add_fuel.tr() : LocaleKeys.log_service.tr()),
           DropdownButtonFormField<ServiceKindViewModel>(
             initialValue: _kind,
             decoration: InputDecoration(labelText: LocaleKeys.category.tr()),
             items: controller.kindItems
-                .map(
-                  (item) => DropdownMenuItem(
-                    value: item.kind,
-                    child: Text(item.label),
-                  ),
-                )
+                .map((item) => DropdownMenuItem(value: item.kind, child: Text(item.label)))
                 .toList(),
             onChanged: controller.setKind,
           ),
@@ -97,9 +82,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
                 name: 'cost',
                 controller: _cost,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.cost_optional.tr(),
-                ),
+                decoration: InputDecoration(labelText: LocaleKeys.cost_optional.tr()),
                 validators: controller.costValidators,
               ),
               SizedBox(height: 16),
@@ -107,9 +90,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
                 name: 'notes',
                 controller: _notes,
                 maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.notes_filters.tr(),
-                ),
+                decoration: InputDecoration(labelText: LocaleKeys.notes_filters.tr()),
               ),
             ],
           ),

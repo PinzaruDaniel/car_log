@@ -23,16 +23,10 @@ class StartupPage extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          controller.error.value!.tr(),
-                          textAlign: TextAlign.center,
-                        ),
+                        Text(controller.error.value!.tr(), textAlign: TextAlign.center),
                         SizedBox(height: 20),
                         GarageButton.filled(
-                          onPressed:
-                              controller.containPendingKey(
-                                MainAppController.loadGarageKey,
-                              )
+                          onPressed: controller.containPendingKey(MainAppController.loadGarageKey)
                               ? null
                               : controller.getVehicles,
                           child: Text(LocaleKeys.retry.tr()),

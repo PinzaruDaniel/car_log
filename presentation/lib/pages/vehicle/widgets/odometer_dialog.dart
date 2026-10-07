@@ -42,14 +42,8 @@ class _OdometerDialogState extends State<OdometerDialog> {
       ),
     ),
     actions: [
-      GarageButton.text(
-        onPressed: () => controller.cancel(context),
-        child: Text(LocaleKeys.cancel.tr()),
-      ),
-      GarageButton.filled(
-        onPressed: () => controller.save(context),
-        child: Text(LocaleKeys.update.tr()),
-      ),
+      GarageButton.text(onPressed: () => controller.cancel(context), child: Text(LocaleKeys.cancel.tr())),
+      GarageButton.filled(onPressed: () => controller.save(context), child: Text(LocaleKeys.update.tr())),
     ],
   );
 }

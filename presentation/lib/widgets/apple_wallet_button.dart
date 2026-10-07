@@ -53,20 +53,12 @@ class _AppleWalletButtonState extends State<AppleWalletButton> {
           break;
 
         default:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                LocaleKeys.wallet_unavailable.tr(),
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.wallet_unavailable.tr())));
       }
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(LocaleKeys.wallet_unavailable.tr())),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.wallet_unavailable.tr())));
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -84,10 +76,6 @@ class _AppleWalletButtonState extends State<AppleWalletButton> {
       return CircularProgressIndicator();
     }
 
-    return SizedBox(
-      width: 220,
-      height: 48,
-      child: AddToAppleWalletButton(onPressed: _addPass),
-    );
+    return SizedBox(width: 220, height: 48, child: AddToAppleWalletButton(onPressed: _addPass));
   }
 }

@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 
 class GarageBadge extends StatelessWidget {
-  const GarageBadge(
-    this.text, {
-    this.color = AppColors.primaryAmber,
-    this.filled = false,
-    super.key,
-  });
+  const GarageBadge(this.text, {this.color = AppColors.primaryAmber, this.filled = false, super.key});
   final String text;
   final Color color;
   final bool filled;

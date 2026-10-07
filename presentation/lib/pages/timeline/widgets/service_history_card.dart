@@ -36,33 +36,21 @@ class ServiceHistoryCard extends StatelessWidget {
         SizedBox(height: 14),
         GarageBadge(record.distance, color: Colors.white60),
         SizedBox(height: 10),
-        Text(
-          record.date,
-          style: TextStyle(color: Colors.white54, fontSize: 12),
-        ),
+        Text(record.date, style: TextStyle(color: Colors.white54, fontSize: 12)),
         if (record.tags.isNotEmpty) ...[
           Divider(height: 28, color: Colors.white12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              for (final tag in record.tags)
-                GarageBadge(tag, color: AppColors.primaryAmberLight),
-            ],
+            children: [for (final tag in record.tags) GarageBadge(tag, color: AppColors.primaryAmberLight)],
           ),
         ] else if (record.notes != null) ...[
           Divider(height: 28, color: Colors.white12),
-          Text(
-            record.notes!,
-            style: TextStyle(color: Colors.white60, height: 1.5, fontSize: 15),
-          ),
+          Text(record.notes!, style: TextStyle(color: Colors.white60, height: 1.5, fontSize: 15)),
         ],
         if (record.showOilBadge) ...[
           SizedBox(height: 14),
-          GarageBadge(
-            LocaleKeys.engine_oil_changed.tr(),
-            color: AppColors.primaryAmberLight,
-          ),
+          GarageBadge(LocaleKeys.engine_oil_changed.tr(), color: AppColors.primaryAmberLight),
         ],
       ],
     ),

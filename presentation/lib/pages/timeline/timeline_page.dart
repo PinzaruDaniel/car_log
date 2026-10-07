@@ -43,13 +43,9 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
       ],
     );
     final export = GarageButton.outlined(
-      onPressed: exporting
-          ? null
-          : () => controller.exportHistory(context, vehicle),
+      onPressed: exporting ? null : () => controller.exportHistory(context, vehicle),
       icon: Icon(Icons.picture_as_pdf_outlined, size: 20.sp),
-      label: Text(
-        exporting ? LocaleKeys.exporting.tr() : LocaleKeys.export_pdf.tr(),
-      ),
+      label: Text(exporting ? LocaleKeys.exporting.tr() : LocaleKeys.export_pdf.tr()),
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -92,24 +88,15 @@ class _TimelinePageState extends BaseState<TimelinePage, TimelineController> {
               children: [
                 Text(
                   LocaleKeys.empty_category.tr(),
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10.h),
-                Text(
-                  LocaleKeys.history_hint.tr(),
-                  style: TextStyle(color: Colors.white54, height: 1.5),
-                ),
+                Text(LocaleKeys.history_hint.tr(), style: TextStyle(color: Colors.white54, height: 1.5)),
                 SizedBox(height: 18.h),
                 GarageButton.filled(
                   onPressed: mainAppController.saving
                       ? null
-                      : () => mainAppController.addRecord(
-                          context,
-                          item.addRecordKind,
-                        ),
+                      : () => mainAppController.addRecord(context, item.addRecordKind),
                   icon: Icon(Icons.add),
                   label: Text(LocaleKeys.add_record.tr()),
                 ),

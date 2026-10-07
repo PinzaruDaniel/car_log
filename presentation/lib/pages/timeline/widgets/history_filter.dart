@@ -3,12 +3,7 @@ import 'package:sensor_shadows/sensor_shadows.dart';
 import '../../../utils/app_colors.dart';
 
 class HistoryFilter extends StatelessWidget {
-  const HistoryFilter({
-    required this.label,
-    required this.selected,
-    required this.onPressed,
-    super.key,
-  });
+  const HistoryFilter({required this.label, required this.selected, required this.onPressed, super.key});
   final String label;
   final bool selected;
   final VoidCallback onPressed;

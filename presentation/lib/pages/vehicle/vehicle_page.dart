@@ -26,12 +26,8 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
   VehicleController buildController() => VehicleController();
 
   @override
-  Widget build(BuildContext context) => LocalizedObx(
-    () => Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: _garage(context),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      LocalizedObx(() => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: _garage(context)));
 
   List<Widget> _garage(BuildContext context) {
     final item = controller.buildViewItem(mainAppController.vehicle.value!);
@@ -45,15 +41,9 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    item.title,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
-                  ),
+                  child: Text(item.title, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700)),
                 ),
-                Text(
-                  item.year,
-                  style: TextStyle(color: AppColors.primaryAmberLight),
-                ),
+                Text(item.year, style: TextStyle(color: AppColors.primaryAmberLight)),
               ],
             ),
             SizedBox(height: 12),
@@ -89,26 +79,16 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
                 Icon(Icons.oil_barrel_outlined, color: AppColors.primaryAmber),
                 SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    LocaleKeys.engine_oil.tr(),
-                    style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
-                  ),
+                  child: Text(LocaleKeys.engine_oil.tr(), style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600)),
                 ),
-                _badge(
-                  oil.status,
-                  oil.healthy ? AppColors.statusGreen : AppColors.primaryAmber,
-                ),
+                _badge(oil.status, oil.healthy ? AppColors.statusGreen : AppColors.primaryAmber),
               ],
             ),
             SizedBox(height: 20),
             if (oil.known) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: oil.progress,
-                  minHeight: 9,
-                  backgroundColor: Colors.white12,
-                ),
+                child: LinearProgressIndicator(value: oil.progress, minHeight: 9, backgroundColor: Colors.white12),
               ),
               SizedBox(height: 16),
               _detail(LocaleKeys.changed.tr(), oil.changedDetails!),
@@ -116,24 +96,16 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
               Text(
                 oil.remaining!,
                 style: TextStyle(
-                  color: oil.healthy
-                      ? AppColors.primaryAmberLight
-                      : AppColors.statusDanger,
+                  color: oil.healthy ? AppColors.primaryAmberLight : AppColors.statusDanger,
                   fontSize: 17,
                 ),
               ),
             ] else ...[
-              Text(
-                LocaleKeys.oil_history_hint.tr(),
-                style: TextStyle(color: Colors.white60, height: 1.5),
-              ),
+              Text(LocaleKeys.oil_history_hint.tr(), style: TextStyle(color: Colors.white60, height: 1.5)),
               GarageButton.text(
                 onPressed: _saving
                     ? null
-                    : () => mainAppController.addRecord(
-                        context,
-                        ServiceKindViewModel.maintenance,
-                      ),
+                    : () => mainAppController.addRecord(context, ServiceKindViewModel.maintenance),
                 child: Text(LocaleKeys.log_oil.tr()),
               ),
             ],
@@ -147,19 +119,12 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.verified_user_outlined,
-                  color: AppColors.primaryAmber,
-                ),
+                Icon(Icons.verified_user_outlined, color: AppColors.primaryAmber),
                 SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    LocaleKeys.insurance.tr(),
-                    style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600),
-                  ),
+                  child: Text(LocaleKeys.insurance.tr(), style: TextStyle(fontSize: 23, fontWeight: FontWeight.w600)),
                 ),
-                if (item.insuranceStatus != null)
-                  _badge(item.insuranceStatus!, AppColors.primaryAmber),
+                if (item.insuranceStatus != null) _badge(item.insuranceStatus!, AppColors.primaryAmber),
               ],
             ),
             SizedBox(height: 12),
@@ -187,9 +152,7 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
             SizedBox(height: 14),
             Text(item.yearlyMaintenanceCost, style: TextStyle(fontSize: 24)),
             Text(
-              LocaleKeys.spent_year.tr(
-                namedArgs: {'year': item.maintenanceYear},
-              ),
+              LocaleKeys.spent_year.tr(namedArgs: {'year': item.maintenanceYear}),
               style: TextStyle(color: Colors.white54),
             ),
           ],
@@ -203,17 +166,13 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
           _action(
             LocaleKeys.log_service.tr(),
             Icons.build_rounded,
-            () => mainAppController.addRecord(
-              context,
-              ServiceKindViewModel.maintenance,
-            ),
+            () => mainAppController.addRecord(context, ServiceKindViewModel.maintenance),
             _actionWidth,
           ),
           _action(
             LocaleKeys.add_fuel.tr(),
             Icons.local_gas_station_rounded,
-            () =>
-                mainAppController.addRecord(context, ServiceKindViewModel.fuel),
+            () => mainAppController.addRecord(context, ServiceKindViewModel.fuel),
             _actionWidth,
           ),
           _action(
@@ -247,17 +206,8 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
     ),
   );
 
-  Widget _action(
-    String label,
-    IconData icon,
-    VoidCallback action,
-    double width,
-  ) => SizedBox(
+  Widget _action(String label, IconData icon, VoidCallback action, double width) => SizedBox(
     width: width,
-    child: VehicleActionTile(
-      label: label,
-      icon: icon,
-      onPressed: _saving ? null : action,
-    ),
+    child: VehicleActionTile(label: label, icon: icon, onPressed: _saving ? null : action),
   );
 }

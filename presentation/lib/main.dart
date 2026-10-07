@@ -59,9 +59,7 @@ class CarLogApp extends StatelessWidget {
             GetPage(name: AppRoutes.main, page: () => const MainPage()),
             GetPage(
               name: AppRoutes.onboarding,
-              page: () => VehicleOnboardingPage(
-                onSaved: Get.find<MainAppController>().completeOnboarding,
-              ),
+              page: () => VehicleOnboardingPage(onSaved: Get.find<MainAppController>().completeOnboarding),
             ),
           ],
           builder: (context, child) => SmartFormTheme(

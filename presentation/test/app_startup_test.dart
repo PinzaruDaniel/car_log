@@ -25,12 +25,7 @@ class StartupGarage extends fixtures.MemoryGarage {
   }
 }
 
-const car = GarageVehicleEntity(
-  make: 'BMW',
-  model: 'E39',
-  year: 2002,
-  odometer: 287450,
-);
+const car = GarageVehicleEntity(make: 'BMW', model: 'E39', year: 2002, odometer: 287450);
 
 void main() {
   late StartupGarage repository;
@@ -49,69 +44,58 @@ void main() {
     await GetIt.instance.reset();
   });
 
-  testWidgets(
-    'cached vehicle routes directly to main and keeps root controller',
-    (tester) async {
-      repository.vehicle = car;
-      await tester.pumpWidget(fixtures.localized(const CarLogApp()));
-      await tester.pumpAndSettle();
-      expect(Get.currentRoute, AppRoutes.main);
-      expect(find.byType(MainPage), findsOneWidget);
-      expect(find.byType(VehicleOnboardingPage), findsNothing);
-      expect(find.text('Timeline'), findsOneWidget);
-      expect(repository.loads, 1);
-      expect(repository.requests, 0);
-      final root = Get.find<MainAppController>();
-      expect(GetIt.instance.isRegistered<MainAppController>(), false);
-      final fresh = MainAppController();
-      expect(fresh, isNot(same(root)));
-      fresh.onDelete();
-      RootBinding().dependencies();
-      expect(Get.find<MainAppController>(), same(root));
-      expect(repository.loads, 1);
-      expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
-      expect(Get.key.currentState!.canPop(), false);
-    },
-  );
+  testWidgets('cached vehicle routes directly to main and keeps root controller', (tester) async {
+    repository.vehicle = car;
+    await tester.pumpWidget(fixtures.localized(const CarLogApp()));
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.main);
+    expect(find.byType(MainPage), findsOneWidget);
+    expect(find.byType(VehicleOnboardingPage), findsNothing);
+    expect(find.text('Timeline'), findsOneWidget);
+    expect(repository.loads, 1);
+    expect(repository.requests, 0);
+    final root = Get.find<MainAppController>();
+    expect(GetIt.instance.isRegistered<MainAppController>(), false);
+    final fresh = MainAppController();
+    expect(fresh, isNot(same(root)));
+    fresh.onDelete();
+    RootBinding().dependencies();
+    expect(Get.find<MainAppController>(), same(root));
+    expect(repository.loads, 1);
+    expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
+    expect(Get.key.currentState!.canPop(), false);
+  });
 
-  testWidgets(
-    'empty cache routes to standalone onboarding without navigation bar',
-    (tester) async {
-      await tester.pumpWidget(fixtures.localized(const CarLogApp()));
-      await tester.pumpAndSettle();
-      expect(Get.currentRoute, AppRoutes.onboarding);
-      expect(find.byType(VehicleOnboardingPage), findsOneWidget);
-      expect(find.byType(MainPage), findsNothing);
-      expect(find.text('Meet your car.'), findsOneWidget);
-      expect(find.text('Timeline'), findsNothing);
-      expect(repository.loads, 1);
-      expect(Get.key.currentState!.canPop(), false);
-    },
-  );
+  testWidgets('empty cache routes to standalone onboarding without navigation bar', (tester) async {
+    await tester.pumpWidget(fixtures.localized(const CarLogApp()));
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.onboarding);
+    expect(find.byType(VehicleOnboardingPage), findsOneWidget);
+    expect(find.byType(MainPage), findsNothing);
+    expect(find.text('Meet your car.'), findsOneWidget);
+    expect(find.text('Timeline'), findsNothing);
+    expect(repository.loads, 1);
+    expect(Get.key.currentState!.canPop(), false);
+  });
 
-  testWidgets(
-    'cache failure stays at startup; retry uses cache without resetting onboarding',
-    (tester) async {
-      repository.failLoad = true;
-      await tester.pumpWidget(fixtures.localized(const CarLogApp()));
-      await tester.pumpAndSettle();
-      expect(Get.currentRoute, AppRoutes.startup);
-      expect(find.text('Retry'), findsOneWidget);
-      expect(find.byType(VehicleOnboardingPage), findsNothing);
-      expect(repository.loads, 1);
-      repository.failLoad = false;
-      repository.vehicle = car;
-      await tester.tap(find.text('Retry'));
-      await tester.pumpAndSettle();
-      expect(Get.currentRoute, AppRoutes.main);
-      expect(repository.loads, 2);
-      expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
-    },
-  );
+  testWidgets('cache failure stays at startup; retry uses cache without resetting onboarding', (tester) async {
+    repository.failLoad = true;
+    await tester.pumpWidget(fixtures.localized(const CarLogApp()));
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.startup);
+    expect(find.text('Retry'), findsOneWidget);
+    expect(find.byType(VehicleOnboardingPage), findsNothing);
+    expect(repository.loads, 1);
+    repository.failLoad = false;
+    repository.vehicle = car;
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, AppRoutes.main);
+    expect(repository.loads, 2);
+    expect(Get.find<MainAppController>().vehicle.value?.title, car.title);
+  });
 
-  testWidgets('pending cache read shows loading and rejects duplicate reads', (
-    tester,
-  ) async {
+  testWidgets('pending cache read shows loading and rejects duplicate reads', (tester) async {
     repository.pending = Completer<GarageVehicleEntity?>();
     await tester.pumpWidget(fixtures.localized(const CarLogApp()));
     await tester.pump();

@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart';
 import 'package:flutter_wallet_kit/flutter_wallet_kit.dart';
 
@@ -8,14 +7,9 @@ class AppleWalletService {
   static const FlutterWalletKit _wallet = FlutterWalletKit();
 
   Future<Uint8List> _loadPass() async {
-    final data = await rootBundle.load(
-      'assets/wallet/MyVehicleCard.pkpass',
-    );
+    final data = await rootBundle.load('assets/wallet/MyVehicleCard.pkpass');
 
-    return data.buffer.asUint8List(
-      data.offsetInBytes,
-      data.lengthInBytes,
-    );
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 
   Future<bool> isSupported() async {
@@ -25,9 +19,7 @@ class AppleWalletService {
   Future<WalletPassStatus> getPassStatus() async {
     final bytes = await _loadPass();
 
-    return _wallet.getPassStatus(
-      iosPassData: bytes,
-    );
+    return _wallet.getPassStatus(iosPassData: bytes);
   }
 
   Future<WalletResult> addPass() async {
@@ -39,8 +31,6 @@ class AppleWalletService {
 
     final bytes = await _loadPass();
 
-    return _wallet.addPass(
-      iosPassData: bytes,
-    );
+    return _wallet.addPass(iosPassData: bytes);
   }
 }

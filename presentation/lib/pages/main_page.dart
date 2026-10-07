@@ -23,26 +23,16 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   StreamSubscription<int>? _tabSubscription;
 
-  List<Widget> get _tabs => const [
-    VehiclePage(),
-    TimelinePage(),
-    AnalyticsPage(),
-    SettingsPage(),
-  ];
+  List<Widget> get _tabs => const [VehiclePage(), TimelinePage(), AnalyticsPage(), SettingsPage()];
 
   @override
   void initState() {
     super.initState();
-    _tabSubscription = mainAppController.mainTabStreamController.stream.listen(
-      _onTabSelected,
-    );
+    _tabSubscription = mainAppController.mainTabStreamController.stream.listen(_onTabSelected);
   }
 
   void _onTabSelected(int index) {
-    if (!mounted ||
-        index == _currentIndex ||
-        index < 0 ||
-        index >= _tabs.length) {
+    if (!mounted || index == _currentIndex || index < 0 || index >= _tabs.length) {
       return;
     }
     setState(() => _currentIndex = index);
@@ -60,10 +50,7 @@ class _MainPageState extends State<MainPage> {
                 constraints: const BoxConstraints(maxWidth: 650),
                 child: IndexedStack(
                   index: _currentIndex,
-                  children: [
-                    for (var index = 0; index < _tabs.length; index++)
-                      _buildTab(index, _tabs[index]),
-                  ],
+                  children: [for (var index = 0; index < _tabs.length; index++) _buildTab(index, _tabs[index])],
                 ),
               ),
             ),
@@ -125,19 +112,12 @@ class _MainPageState extends State<MainPage> {
                     LocaleKeys.analytics.tr(),
                     LocaleKeys.settings.tr(),
                   ][index],
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
                 ),
               ),
               const SizedBox(width: 12),
               if (mainAppController.saving)
-                const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
             ],
           ),
         if (index != 1) const SizedBox(height: 22),

@@ -21,10 +21,7 @@ class _SettingsPageState extends BaseState<SettingsPage, SettingsController> {
   Widget build(BuildContext context) => LocalizedObx(
     () => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: _settings(
-        context,
-        controller.buildViewItem(mainAppController.vehicle.value!),
-      ),
+      children: _settings(context, controller.buildViewItem(mainAppController.vehicle.value!)),
     ),
   );
   Widget _detail(String label, String value) => Padding(
@@ -48,18 +45,11 @@ class _SettingsPageState extends BaseState<SettingsPage, SettingsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionTitle(item.title),
-          for (final detail in item.details)
-            _detail(detail.label, detail.value),
+          for (final detail in item.details) _detail(detail.label, detail.value),
           Divider(height: 32),
-          Text(
-            item.storageTitle,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
+          Text(item.storageTitle, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           SizedBox(height: 8),
-          Text(
-            item.storageDescription,
-            style: TextStyle(color: Colors.white54, height: 1.5),
-          ),
+          Text(item.storageDescription, style: TextStyle(color: Colors.white54, height: 1.5)),
         ],
       ),
     ),
@@ -69,14 +59,8 @@ class _SettingsPageState extends BaseState<SettingsPage, SettingsController> {
         initialValue: context.locale,
         decoration: InputDecoration(labelText: LocaleKeys.language.tr()),
         items: [
-          DropdownMenuItem(
-            value: const Locale('en'),
-            child: Text(LocaleKeys.english.tr()),
-          ),
-          DropdownMenuItem(
-            value: const Locale('ro'),
-            child: Text(LocaleKeys.romanian.tr()),
-          ),
+          DropdownMenuItem(value: const Locale('en'), child: Text(LocaleKeys.english.tr())),
+          DropdownMenuItem(value: const Locale('ro'), child: Text(LocaleKeys.romanian.tr())),
         ],
         onChanged: (locale) => controller.changeLanguage(context, locale),
       ),

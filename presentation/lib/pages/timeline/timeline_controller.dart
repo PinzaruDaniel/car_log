@@ -16,38 +16,23 @@ class TimelineController extends BaseController {
     if (active) filter.value = value;
   }
 
-  TimelineViewItem buildViewItem(GarageVehicleViewModel vehicle) =>
-      TimelineViewItem(
-        title: LocaleKeys.history_title.tr(namedArgs: {'car': vehicle.title}),
-        filters: [null, ...ServiceKindViewModel.values]
-            .map(
-              (kind) => TimelineFilterViewItem(
-                kind: kind,
-                label: _categoryLabel(kind),
-                selected: filter.value == kind,
-              ),
-            )
-            .toList(growable: false),
-        groups: historyGroups(vehicle),
-        addRecordKind: filter.value ?? ServiceKindViewModel.maintenance,
-      );
+  TimelineViewItem buildViewItem(GarageVehicleViewModel vehicle) => TimelineViewItem(
+    title: LocaleKeys.history_title.tr(namedArgs: {'car': vehicle.title}),
+    filters: [null, ...ServiceKindViewModel.values]
+        .map((kind) => TimelineFilterViewItem(kind: kind, label: _categoryLabel(kind), selected: filter.value == kind))
+        .toList(growable: false),
+    groups: historyGroups(vehicle),
+    addRecordKind: filter.value ?? ServiceKindViewModel.maintenance,
+  );
 
-  List<ServiceRecordViewModel> _filteredRecords(
-    GarageVehicleViewModel vehicle,
-  ) =>
-      vehicle.records
-          .where(
-            (record) => filter.value == null || record.kind == filter.value,
-          )
-          .toList()
+  List<ServiceRecordViewModel> _filteredRecords(GarageVehicleViewModel vehicle) =>
+      vehicle.records.where((record) => filter.value == null || record.kind == filter.value).toList()
         ..sort((a, b) => b.date.compareTo(a.date));
 
   List<TimelineGroupViewItem> historyGroups(GarageVehicleViewModel vehicle) {
     final groups = <TimelineGroupViewItem>[];
     for (final record in _filteredRecords(vehicle)) {
-      if (groups.isEmpty ||
-          groups.last.year != record.date.year ||
-          groups.last.month != record.date.month) {
+      if (groups.isEmpty || groups.last.year != record.date.year || groups.last.month != record.date.month) {
         groups.add(
           TimelineGroupViewItem(
             year: record.date.year,
@@ -69,13 +54,8 @@ class TimelineController extends BaseController {
     ServiceKindViewModel.fuel => LocaleKeys.fuel.tr(),
   };
 
-  List<String> _historyTags(ServiceRecordViewModel record) =>
-      record.oil && record.notes.contains(' · ')
-      ? record.notes
-            .split(' · ')
-            .map((tag) => filterLabel(tag.trim()))
-            .where((tag) => tag.isNotEmpty)
-            .toList()
+  List<String> _historyTags(ServiceRecordViewModel record) => record.oil && record.notes.contains(' · ')
+      ? record.notes.split(' · ').map((tag) => filterLabel(tag.trim())).where((tag) => tag.isNotEmpty).toList()
       : [];
 
   TimelineRecordViewItem _recordViewItem(ServiceRecordViewModel record) {
@@ -85,41 +65,28 @@ class TimelineController extends BaseController {
       distance: distance(record.km),
       date: displayDate(record.date),
       cost: money(record.cost, decimals: 0),
-      notes: tags.isEmpty && record.notes.isNotEmpty
-          ? _recordNotes(record)
-          : null,
+      notes: tags.isEmpty && record.notes.isNotEmpty ? _recordNotes(record) : null,
       tags: tags,
       showOilBadge: record.oil && tags.isEmpty,
     );
   }
 
   String _recordTitle(ServiceRecordViewModel record) =>
-      record.title == LocaleKeys.oil_filters_service
-      ? LocaleKeys.oil_filters_service.tr()
-      : record.title;
+      record.title == LocaleKeys.oil_filters_service ? LocaleKeys.oil_filters_service.tr() : record.title;
 
-  String _recordNotes(ServiceRecordViewModel record) => record.oil
-      ? record.notes.split(' · ').map(filterLabel).join(' · ')
-      : record.notes;
+  String _recordNotes(ServiceRecordViewModel record) =>
+      record.oil ? record.notes.split(' · ').map(filterLabel).join(' · ') : record.notes;
 
-  Future<void> exportHistory(
-    BuildContext context,
-    GarageVehicleViewModel vehicle,
-  ) async {
+  Future<void> exportHistory(BuildContext context, GarageVehicleViewModel vehicle) async {
     if (exporting || !active) return;
     startLoading([exportKey]);
     try {
       final bytes = await buildServiceHistoryPdf(buildPdfViewModel(vehicle));
       if (!active) return;
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: 'car-log-service-history.pdf',
-      );
+      await Printing.sharePdf(bytes: bytes, filename: 'car-log-service-history.pdf');
     } catch (_) {
       if (active && context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(LocaleKeys.export_error.tr())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.export_error.tr())));
       }
     } finally {
       stopLoading([exportKey]);
@@ -127,19 +94,13 @@ class TimelineController extends BaseController {
   }
 
   ServiceHistoryPdfViewModel buildPdfViewModel(GarageVehicleViewModel vehicle) {
-    final records = [...vehicle.records]
-      ..sort((a, b) => b.date.compareTo(a.date));
+    final records = [...vehicle.records]..sort((a, b) => b.date.compareTo(a.date));
     return ServiceHistoryPdfViewModel(
       title: LocaleKeys.pdf_title.tr(namedArgs: {'car': vehicle.title}),
       vehicleSummary: LocaleKeys.pdf_vehicle.tr(
-        namedArgs: {
-          'year': '${vehicle.year}',
-          'km': kilometres(vehicle.odometer),
-        },
+        namedArgs: {'year': '${vehicle.year}', 'km': kilometres(vehicle.odometer)},
       ),
-      vin: vehicle.vin.isEmpty
-          ? null
-          : LocaleKeys.pdf_vin.tr(namedArgs: {'vin': vehicle.vin}),
+      vin: vehicle.vin.isEmpty ? null : LocaleKeys.pdf_vin.tr(namedArgs: {'vin': vehicle.vin}),
       emptyMessage: LocaleKeys.pdf_empty.tr(),
       records: records
           .map(
@@ -149,9 +110,7 @@ class TimelineController extends BaseController {
                 namedArgs: {
                   'date': displayDate(record.date),
                   'km': kilometres(record.km),
-                  'cost': NumberFormat.decimalPatternDigits(
-                    decimalDigits: 2,
-                  ).format(record.cost),
+                  'cost': NumberFormat.decimalPatternDigits(decimalDigits: 2).format(record.cost),
                   'category': _categoryLabel(record.kind),
                 },
               ),
@@ -178,11 +137,7 @@ class TimelineViewItem {
 }
 
 class TimelineFilterViewItem {
-  const TimelineFilterViewItem({
-    required this.kind,
-    required this.label,
-    required this.selected,
-  });
+  const TimelineFilterViewItem({required this.kind, required this.label, required this.selected});
 
   final ServiceKindViewModel? kind;
   final String label;

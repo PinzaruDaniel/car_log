@@ -15,19 +15,15 @@ import 'mappers/garage_vehicle_view_model_mapper.dart';
 import 'service_record_controller.dart';
 
 class VehicleOnboardingController extends BaseController {
-  VehicleOnboardingController({
-    SaveGarageUseCase? saveGarageUseCase,
-    DecodeVinUseCase? decodeVinUseCase,
-  }) : _saveOverride = saveGarageUseCase,
-       _decodeOverride = decodeVinUseCase {
+  VehicleOnboardingController({SaveGarageUseCase? saveGarageUseCase, DecodeVinUseCase? decodeVinUseCase})
+    : _saveOverride = saveGarageUseCase,
+      _decodeOverride = decodeVinUseCase {
     fields['interval']!.text = '10000';
   }
   final SaveGarageUseCase? _saveOverride;
   final DecodeVinUseCase? _decodeOverride;
-  SaveGarageUseCase get _saveGarageUseCase =>
-      _saveOverride ?? getInstance<SaveGarageUseCase>();
-  DecodeVinUseCase get decodeVinUseCase =>
-      _decodeOverride ?? getInstance<DecodeVinUseCase>();
+  SaveGarageUseCase get _saveGarageUseCase => _saveOverride ?? getInstance<SaveGarageUseCase>();
+  DecodeVinUseCase get decodeVinUseCase => _decodeOverride ?? getInstance<DecodeVinUseCase>();
   final onSaved = Rxn<ValueChanged<GarageVehicleViewModel>>();
   static const decodeKey = 'decodeVin', saveKey = 'saveGarage';
   bool get busy => containPendingKey(decodeKey) || containPendingKey(saveKey);
@@ -35,18 +31,7 @@ class VehicleOnboardingController extends BaseController {
   final serviceForm = SmartFormController();
   final vin = TextEditingController();
   final fields = {
-    for (final name in [
-      'make',
-      'model',
-      'year',
-      'body',
-      'fuel',
-      'engine',
-      'odometer',
-      'interval',
-      'oilKm',
-      'oilCost',
-    ])
+    for (final name in ['make', 'model', 'year', 'body', 'fuel', 'engine', 'odometer', 'interval', 'oilKm', 'oilCost'])
       name: TextEditingController(),
   };
   final records = <OnboardingServiceRecordViewItem>[].obs;
@@ -66,21 +51,10 @@ class VehicleOnboardingController extends BaseController {
     int? min,
     int? max,
   }) => [
-    if (required)
-      SmartValidators.required(
-        message: LocaleKeys.required_field.tr(namedArgs: {'label': label}),
-      ),
+    if (required) SmartValidators.required(message: LocaleKeys.required_field.tr(namedArgs: {'label': label})),
     if (number) SmartValidators.number(message: LocaleKeys.invalid_number.tr()),
-    if (min != null)
-      SmartValidators.min(
-        min,
-        message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '$min'}),
-      ),
-    if (max != null)
-      SmartValidators.max(
-        max,
-        message: LocaleKeys.maximum_value.tr(namedArgs: {'value': '$max'}),
-      ),
+    if (min != null) SmartValidators.min(min, message: LocaleKeys.minimum_value.tr(namedArgs: {'value': '$min'})),
+    if (max != null) SmartValidators.max(max, message: LocaleKeys.maximum_value.tr(namedArgs: {'value': '$max'})),
   ];
 
   void mutate(VoidCallback change) {
@@ -120,12 +94,7 @@ class VehicleOnboardingController extends BaseController {
     final values = await SelectionSheet.showMulti<String>(
       context: context,
       title: LocaleKeys.filters_title.tr(),
-      items: [
-        LocaleKeys.oil_filter,
-        LocaleKeys.air_filter,
-        LocaleKeys.cabin_filter,
-        LocaleKeys.fuel_filter,
-      ],
+      items: [LocaleKeys.oil_filter, LocaleKeys.air_filter, LocaleKeys.cabin_filter, LocaleKeys.fuel_filter],
       initialSelection: filters,
       itemLabelBuilder: (item) => item.tr(),
     );
@@ -133,10 +102,7 @@ class VehicleOnboardingController extends BaseController {
   }
 
   Future<void> addRecord(BuildContext context) async {
-    final editor = ServiceRecordController(
-      ServiceKindViewModel.repair,
-      int.tryParse(fields['odometer']!.text),
-    );
+    final editor = ServiceRecordController(ServiceKindViewModel.repair, int.tryParse(fields['odometer']!.text));
     final value = await showModalBottomSheet<ServiceRecordEntity>(
       context: context,
       isScrollControlled: true,
@@ -165,10 +131,7 @@ class VehicleOnboardingController extends BaseController {
     if (busy || !active) return;
     message.value = null;
     hasVinWarning.value = false;
-    final result = await runPending(
-      decodeKey,
-      () => decodeVinUseCase(vin.text),
-    );
+    final result = await runPending(decodeKey, () => decodeVinUseCase(vin.text));
     if (!active) return;
     result.fold(
       onSuccess: (data) {
@@ -182,9 +145,7 @@ class VehicleOnboardingController extends BaseController {
           fields[entry.key]?.text = entry.value;
         }
         details.value = true;
-        message.value = found.isEmpty
-            ? LocaleKeys.vin_no_details
-            : LocaleKeys.vin_found_details;
+        message.value = found.isEmpty ? LocaleKeys.vin_no_details : LocaleKeys.vin_found_details;
         hasVinWarning.value = data['_warning'] != null;
       },
       onFailure: (error) => message.value = error,
@@ -194,10 +155,7 @@ class VehicleOnboardingController extends BaseController {
   Future<void> next(BuildContext context) async {
     if (busy) return;
     if (step.value == 0) {
-      if (vin.text.trim().isNotEmpty &&
-          !RegExp(
-            r'^[A-HJ-NPR-Z0-9]{17}$',
-          ).hasMatch(vin.text.trim().toUpperCase())) {
+      if (vin.text.trim().isNotEmpty && !RegExp(r'^[A-HJ-NPR-Z0-9]{17}$').hasMatch(vin.text.trim().toUpperCase())) {
         showError(context, LocaleKeys.vin_invalid_manual);
         return;
       }
@@ -211,9 +169,7 @@ class VehicleOnboardingController extends BaseController {
       });
       return;
     }
-    if (!(await serviceForm.validate()).isValid ||
-        !active ||
-        !context.mounted) {
+    if (!(await serviceForm.validate()).isValid || !active || !context.mounted) {
       return;
     }
     final odometer = int.parse(fields['odometer']!.text);
@@ -222,8 +178,7 @@ class VehicleOnboardingController extends BaseController {
       return;
     }
     final oilKm = int.tryParse(fields['oilKm']!.text);
-    if (oilKnown.value && oilKm != null && oilKm > odometer ||
-        _recordEntities.any((record) => record.km > odometer)) {
+    if (oilKnown.value && oilKm != null && oilKm > odometer || _recordEntities.any((record) => record.km > odometer)) {
       showError(context, LocaleKeys.service_km_error);
       return;
     }
@@ -267,23 +222,13 @@ class VehicleOnboardingController extends BaseController {
 
   void showError(BuildContext context, String value) {
     mutate(() => message.value = value);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(value.tr())));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value.tr())));
   }
 
-  OnboardingServiceRecordViewItem _recordViewItem(ServiceRecordEntity entity) =>
-      OnboardingServiceRecordViewItem(
-        title: entity.title == LocaleKeys.oil_filters_service
-            ? LocaleKeys.oil_filters_service.tr()
-            : entity.title,
-        subtitle: LocaleKeys.service_date_km.tr(
-          namedArgs: {
-            'date': displayDate(entity.date),
-            'km': kilometres(entity.km),
-          },
-        ),
-      );
+  OnboardingServiceRecordViewItem _recordViewItem(ServiceRecordEntity entity) => OnboardingServiceRecordViewItem(
+    title: entity.title == LocaleKeys.oil_filters_service ? LocaleKeys.oil_filters_service.tr() : entity.title,
+    subtitle: LocaleKeys.service_date_km.tr(namedArgs: {'date': displayDate(entity.date), 'km': kilometres(entity.km)}),
+  );
 
   @override
   void onClose() {
@@ -299,10 +244,7 @@ class VehicleOnboardingController extends BaseController {
 }
 
 class OnboardingServiceRecordViewItem {
-  const OnboardingServiceRecordViewItem({
-    required this.title,
-    required this.subtitle,
-  });
+  const OnboardingServiceRecordViewItem({required this.title, required this.subtitle});
 
   final String title;
   final String subtitle;
