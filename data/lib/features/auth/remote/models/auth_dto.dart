@@ -5,9 +5,7 @@ part 'auth_dto.g.dart';
 
 @freezed
 abstract class AuthDto with _$AuthDto {
-  const factory AuthDto({
-    required String id,
-  }) = _AuthDto;
+  const factory AuthDto({required String id}) = _AuthDto;
 
   factory AuthDto.fromJson(Map<String, dynamic> json) =>
       _$AuthDtoFromJson(json);

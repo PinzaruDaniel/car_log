@@ -5,10 +5,10 @@ import '../repositories/garage_repository.dart';
 
 /// Reads the saved garage from the local cache (including legacy import).
 @injectable
-class GetGarageUseCase extends NoParamsFutureUseCase<GarageVehicle?> {
+class GetGarageUseCase extends NoParamsFutureUseCase<GarageVehicleEntity?> {
   const GetGarageUseCase(this._repository);
   final GarageRepository _repository;
 
   @override
-  Future<GarageVehicle?> execute() => _repository.load();
+  Future<GarageVehicleEntity?> execute() => _repository.load();
 }

@@ -3,4 +3,8 @@ analyzer:
     - build/**
     - android/**
     - ios/**
+    - windows/**
+    - macos/**
 include: package:flutter_lints/flutter.yaml
+formatter:
+  page_width: 120

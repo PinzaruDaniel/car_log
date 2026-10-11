@@ -6,8 +6,8 @@ part of 'garage_vehicle.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_GarageVehicle _$GarageVehicleFromJson(Map<String, dynamic> json) =>
-    _GarageVehicle(
+_GarageVehicleEntity _$GarageVehicleEntityFromJson(Map<String, dynamic> json) =>
+    _GarageVehicleEntity(
       make: json['make'] as String,
       model: json['model'] as String,
       year: (json['year'] as num).toInt(),
@@ -22,22 +22,25 @@ _GarageVehicle _$GarageVehicleFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['insuranceExpiry'] as String),
       records:
           (json['records'] as List<dynamic>?)
-              ?.map((e) => ServiceRecord.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                (e) => ServiceRecordEntity.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           const [],
     );
 
-Map<String, dynamic> _$GarageVehicleToJson(_GarageVehicle instance) =>
-    <String, dynamic>{
-      'make': instance.make,
-      'model': instance.model,
-      'year': instance.year,
-      'odometer': instance.odometer,
-      'vin': instance.vin,
-      'body': instance.body,
-      'fuel': instance.fuel,
-      'engine': instance.engine,
-      'oilInterval': instance.oilInterval,
-      'insuranceExpiry': instance.insuranceExpiry?.toIso8601String(),
-      'records': instance.records.map((e) => e.toJson()).toList(),
-    };
+Map<String, dynamic> _$GarageVehicleEntityToJson(
+  _GarageVehicleEntity instance,
+) => <String, dynamic>{
+  'make': instance.make,
+  'model': instance.model,
+  'year': instance.year,
+  'odometer': instance.odometer,
+  'vin': instance.vin,
+  'body': instance.body,
+  'fuel': instance.fuel,
+  'engine': instance.engine,
+  'oilInterval': instance.oilInterval,
+  'insuranceExpiry': instance.insuranceExpiry?.toIso8601String(),
+  'records': instance.records.map((e) => e.toJson()).toList(),
+};

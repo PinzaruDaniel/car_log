@@ -4,8 +4,7 @@ import 'package:smart_domain/smart_domain.dart';
 
 /// Shared GetX lifecycle, use-case lookup and operation-specific loading.
 /// Controllers belong to GetX/views; only domain/data dependencies use GetIt.
-abstract class BaseController extends FullLifeCycleController
-    with FullLifeCycleMixin {
+abstract class BaseController extends FullLifeCycleController with FullLifeCycleMixin {
   final RxList<String> _pendingIds = <String>[].obs;
   RxList<String> get getPendingKeys => _pendingIds;
   bool get active => !isClosed;
@@ -18,8 +17,7 @@ abstract class BaseController extends FullLifeCycleController
     _pendingIds.addAll(keys.where((key) => !_pendingIds.contains(key)));
   }
 
-  void removePendingIds(List<String> keys) =>
-      _pendingIds.removeWhere(keys.contains);
+  void removePendingIds(List<String> keys) => _pendingIds.removeWhere(keys.contains);
   void startLoading(List<String> keys) => addPendingIds(keys);
   void stopLoading(List<String> keys) => removePendingIds(keys);
 
@@ -33,16 +31,11 @@ abstract class BaseController extends FullLifeCycleController
     }
   }
 
-  Future<R> launchUseCaseNoParams<R>(
-    NoParamsFutureUseCase<R> useCase,
-    String pendingKey,
-  ) => runPending(pendingKey, useCase.call);
+  Future<R> launchUseCaseNoParams<R>(NoParamsFutureUseCase<R> useCase, String pendingKey) =>
+      runPending(pendingKey, useCase.call);
 
-  Future<R> launchUseCase<R, P>(
-    FutureUseCase<R, P> useCase,
-    P params,
-    String pendingKey,
-  ) => runPending(pendingKey, () => useCase(params));
+  Future<R> launchUseCase<R, P>(FutureUseCase<R, P> useCase, P params, String pendingKey) =>
+      runPending(pendingKey, () => useCase(params));
 
   @override
   void onClose() {

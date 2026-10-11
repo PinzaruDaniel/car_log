@@ -3,9 +3,9 @@ import '../localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'garage_button.dart';
 import 'package:flutter/services.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import 'package:smart_form_fields/smart_form_fields.dart';
 import '../controllers/service_record_controller.dart';
+import '../view_models/garage_vehicle_view_model.dart';
 import 'garage_widgets.dart';
 
 class ServiceRecordEditor extends StatefulWidget {
@@ -22,7 +22,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
   TextEditingController get _km => controller.km;
   TextEditingController get _cost => controller.cost;
   TextEditingController get _notes => controller.notes;
-  ServiceKind get _kind => controller.kind.value;
+  ServiceKindViewModel get _kind => controller.kind.value;
   DateTime get _date => controller.date.value;
   bool get _oil => controller.oil.value;
   @override
@@ -40,29 +40,17 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
   @override
   Widget build(BuildContext context) => LocalizedObx(() => buildEditor(context));
   Widget buildEditor(BuildContext context) => Padding(
-    padding: EdgeInsets.fromLTRB(
-      24,
-      24,
-      24,
-      MediaQuery.viewInsetsOf(context).bottom + 24,
-    ),
+    padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.viewInsetsOf(context).bottom + 24),
     child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionTitle(
-            _kind == ServiceKind.fuel
-                ? LocaleKeys.add_fuel.tr()
-                : LocaleKeys.log_service.tr(),
-          ),
-          DropdownButtonFormField<ServiceKind>(
+          SectionTitle(_kind == ServiceKindViewModel.fuel ? LocaleKeys.add_fuel.tr() : LocaleKeys.log_service.tr()),
+          DropdownButtonFormField<ServiceKindViewModel>(
             initialValue: _kind,
             decoration: InputDecoration(labelText: LocaleKeys.category.tr()),
-            items: ServiceKind.values
-                .map(
-                  (v) =>
-                      DropdownMenuItem(value: v, child: Text(categoryLabel(v))),
-                )
+            items: controller.kindItems
+                .map((item) => DropdownMenuItem(value: item.kind, child: Text(item.label)))
                 .toList(),
             onChanged: controller.setKind,
           ),
@@ -74,7 +62,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
                 name: 'title',
                 controller: _title,
                 decoration: InputDecoration(
-                  labelText: _kind == ServiceKind.fuel
+                  labelText: _kind == ServiceKindViewModel.fuel
                       ? LocaleKeys.fuel_station.tr()
                       : LocaleKeys.what_done.tr(),
                 ),
@@ -94,9 +82,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
                 name: 'cost',
                 controller: _cost,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.cost_optional.tr(),
-                ),
+                decoration: InputDecoration(labelText: LocaleKeys.cost_optional.tr()),
                 validators: controller.costValidators,
               ),
               SizedBox(height: 16),
@@ -104,9 +90,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
                 name: 'notes',
                 controller: _notes,
                 maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.notes_filters.tr(),
-                ),
+                decoration: InputDecoration(labelText: LocaleKeys.notes_filters.tr()),
               ),
             ],
           ),
@@ -116,7 +100,7 @@ class _ServiceRecordEditorState extends State<ServiceRecordEditor> {
             icon: Icon(Icons.calendar_month),
             label: Text(displayDate(_date)),
           ),
-          if (_kind == ServiceKind.maintenance)
+          if (_kind == ServiceKindViewModel.maintenance)
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               value: _oil,

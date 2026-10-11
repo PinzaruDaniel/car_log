@@ -59,18 +59,11 @@ class _AuthPageState extends State<AuthPage> {
                     ? SmartTextField(
                         item: SmartTextFieldViewItem(
                           name: 'vin',
-                          validators: <SmartValidator>[
-                            SmartValidators.length(
-                              17,
-                              message: LocaleKeys.vin_length.tr(),
-                            ),
-                          ],
+                          validators: <SmartValidator>[SmartValidators.length(17, message: LocaleKeys.vin_length.tr())],
                         ),
                       )
                     : Column(
-                        children: controller.formFieldViewItems
-                            .map((item) => SmartTextField(item: item))
-                            .toList(),
+                        children: controller.formFieldViewItems.map((item) => SmartTextField(item: item)).toList(),
                       ),
               ],
             );

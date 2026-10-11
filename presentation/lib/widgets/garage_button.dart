@@ -6,38 +6,21 @@ enum _ButtonAppearance { filled, outlined, text, icon }
 
 /// Consistent touch targets, disabled states and sensor lighting across pages.
 class GarageButton extends StatelessWidget {
-  const GarageButton.filled({
-    required this.onPressed,
-    this.child,
-    this.label,
-    this.icon,
-    super.key,
-  }) : _appearance = _ButtonAppearance.filled,
-       tooltip = null;
-  const GarageButton.outlined({
-    required this.onPressed,
-    this.child,
-    this.label,
-    this.icon,
-    super.key,
-  }) : _appearance = _ButtonAppearance.outlined,
-       tooltip = null;
-  const GarageButton.text({
-    required this.onPressed,
-    required this.child,
-    super.key,
-  }) : _appearance = _ButtonAppearance.text,
-       label = null,
-       icon = null,
-       tooltip = null;
-  const GarageButton.icon({
-    required this.onPressed,
-    required this.icon,
-    this.tooltip,
-    super.key,
-  }) : _appearance = _ButtonAppearance.icon,
-       child = null,
-       label = null;
+  const GarageButton.filled({required this.onPressed, this.child, this.label, this.icon, super.key})
+    : _appearance = _ButtonAppearance.filled,
+      tooltip = null;
+  const GarageButton.outlined({required this.onPressed, this.child, this.label, this.icon, super.key})
+    : _appearance = _ButtonAppearance.outlined,
+      tooltip = null;
+  const GarageButton.text({required this.onPressed, required this.child, super.key})
+    : _appearance = _ButtonAppearance.text,
+      label = null,
+      icon = null,
+      tooltip = null;
+  const GarageButton.icon({required this.onPressed, required this.icon, this.tooltip, super.key})
+    : _appearance = _ButtonAppearance.icon,
+      child = null,
+      label = null;
 
   final VoidCallback? onPressed;
   final Widget? child, label, icon;
@@ -69,9 +52,7 @@ class GarageButton extends StatelessWidget {
     Widget button = SensorShadowButton(
       onPressed: onPressed,
       foregroundColor: foreground,
-      padding: iconOnly
-          ? const EdgeInsets.all(12)
-          : const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      padding: iconOnly ? const EdgeInsets.all(12) : const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       style: SensorShadowStyle(
         color: onPressed == null
             ? const Color(0xFF272727)
@@ -79,9 +60,7 @@ class GarageButton extends StatelessWidget {
             ? AppColors.primaryAmber
             : const Color(0xFF212224),
         shadowColor: Colors.black.withValues(alpha: .4),
-        highlightColor: filled
-            ? AppColors.primaryAmberLight
-            : AppColors.primaryAmber,
+        highlightColor: filled ? AppColors.primaryAmberLight : AppColors.primaryAmber,
         lightIntensity: filled ? .2 : .065,
         maxOffset: 6,
         blurRadius: 16,
@@ -94,9 +73,7 @@ class GarageButton extends StatelessWidget {
         position: DecorationPosition.foreground,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: AppColors.primaryAmber.withValues(alpha: .6),
-          ),
+          border: Border.all(color: AppColors.primaryAmber.withValues(alpha: .6)),
         ),
         child: button,
       );

@@ -4,7 +4,5 @@ part 'vehicle_entity.freezed.dart';
 
 @freezed
 abstract class VehicleEntity with _$VehicleEntity {
-  const factory VehicleEntity({
-    required String remoteId,
-  }) = _VehicleEntity;
+  const factory VehicleEntity({required String remoteId}) = _VehicleEntity;
 }

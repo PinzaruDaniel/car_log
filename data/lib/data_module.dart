@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as p;
@@ -43,7 +45,9 @@ abstract class DataModule {
   @factoryMethod
   @preResolve
   Future<Store> asyncCreateStore() async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = Platform.isMacOS
+        ? await getApplicationSupportDirectory()
+        : await getApplicationDocumentsDirectory();
     return openStore(directory: p.join(directory.path, 'objectbox'));
   }
 

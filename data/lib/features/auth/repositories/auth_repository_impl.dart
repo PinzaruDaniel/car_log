@@ -12,8 +12,8 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
     required AuthLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   final AuthRemoteDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
@@ -23,7 +23,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final items = await _remoteDataSource.getItems();
       await _localDataSource.cacheItems(items);
-      return right(items.map((item) => item.toEntity()).toList(growable: false));
+      return right(
+        items.map((item) => item.toEntity()).toList(growable: false),
+      );
     } catch (error) {
       return left(Failure(error.toString()));
     }

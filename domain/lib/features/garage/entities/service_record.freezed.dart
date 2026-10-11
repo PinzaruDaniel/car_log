@@ -13,22 +13,22 @@ part of 'service_record.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ServiceRecord {
+mixin _$ServiceRecordEntity {
 
  String get title; DateTime get date; int get km; ServiceKind get kind; double get cost; String get notes; bool get oil;
-/// Create a copy of ServiceRecord
+/// Create a copy of ServiceRecordEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ServiceRecordCopyWith<ServiceRecord> get copyWith => _$ServiceRecordCopyWithImpl<ServiceRecord>(this as ServiceRecord, _$identity);
+$ServiceRecordEntityCopyWith<ServiceRecordEntity> get copyWith => _$ServiceRecordEntityCopyWithImpl<ServiceRecordEntity>(this as ServiceRecordEntity, _$identity);
 
-  /// Serializes this ServiceRecord to a JSON map.
+  /// Serializes this ServiceRecordEntity to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServiceRecord&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.km, km) || other.km == km)&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.oil, oil) || other.oil == oil));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServiceRecordEntity&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.km, km) || other.km == km)&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.oil, oil) || other.oil == oil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,title,date,km,kind,cost,notes,oil);
 
 @override
 String toString() {
-  return 'ServiceRecord(title: $title, date: $date, km: $km, kind: $kind, cost: $cost, notes: $notes, oil: $oil)';
+  return 'ServiceRecordEntity(title: $title, date: $date, km: $km, kind: $kind, cost: $cost, notes: $notes, oil: $oil)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ServiceRecordCopyWith<$Res>  {
-  factory $ServiceRecordCopyWith(ServiceRecord value, $Res Function(ServiceRecord) _then) = _$ServiceRecordCopyWithImpl;
+abstract mixin class $ServiceRecordEntityCopyWith<$Res>  {
+  factory $ServiceRecordEntityCopyWith(ServiceRecordEntity value, $Res Function(ServiceRecordEntity) _then) = _$ServiceRecordEntityCopyWithImpl;
 @useResult
 $Res call({
  String title, DateTime date, int km, ServiceKind kind, double cost, String notes, bool oil
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$ServiceRecordCopyWithImpl<$Res>
-    implements $ServiceRecordCopyWith<$Res> {
-  _$ServiceRecordCopyWithImpl(this._self, this._then);
+class _$ServiceRecordEntityCopyWithImpl<$Res>
+    implements $ServiceRecordEntityCopyWith<$Res> {
+  _$ServiceRecordEntityCopyWithImpl(this._self, this._then);
 
-  final ServiceRecord _self;
-  final $Res Function(ServiceRecord) _then;
+  final ServiceRecordEntity _self;
+  final $Res Function(ServiceRecordEntity) _then;
 
-/// Create a copy of ServiceRecord
+/// Create a copy of ServiceRecordEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? date = null,Object? km = null,Object? kind = null,Object? cost = null,Object? notes = null,Object? oil = null,}) {
   return _then(_self.copyWith(
@@ -81,8 +81,8 @@ as bool,
 }
 
 
-/// Adds pattern-matching-related methods to [ServiceRecord].
-extension ServiceRecordPatterns on ServiceRecord {
+/// Adds pattern-matching-related methods to [ServiceRecordEntity].
+extension ServiceRecordEntityPatterns on ServiceRecordEntity {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -95,10 +95,10 @@ extension ServiceRecordPatterns on ServiceRecord {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ServiceRecord value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ServiceRecordEntity value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _ServiceRecord() when $default != null:
+case _ServiceRecordEntity() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -117,10 +117,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ServiceRecord value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ServiceRecordEntity value)  $default,){
 final _that = this;
 switch (_that) {
-case _ServiceRecord():
+case _ServiceRecordEntity():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -138,10 +138,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ServiceRecord value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ServiceRecordEntity value)?  $default,){
 final _that = this;
 switch (_that) {
-case _ServiceRecord() when $default != null:
+case _ServiceRecordEntity() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -161,7 +161,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  DateTime date,  int km,  ServiceKind kind,  double cost,  String notes,  bool oil)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _ServiceRecord() when $default != null:
+case _ServiceRecordEntity() when $default != null:
 return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.notes,_that.oil);case _:
   return orElse();
 
@@ -182,7 +182,7 @@ return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.note
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  DateTime date,  int km,  ServiceKind kind,  double cost,  String notes,  bool oil)  $default,) {final _that = this;
 switch (_that) {
-case _ServiceRecord():
+case _ServiceRecordEntity():
 return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.notes,_that.oil);case _:
   throw StateError('Unexpected subclass');
 
@@ -202,7 +202,7 @@ return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.note
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  DateTime date,  int km,  ServiceKind kind,  double cost,  String notes,  bool oil)?  $default,) {final _that = this;
 switch (_that) {
-case _ServiceRecord() when $default != null:
+case _ServiceRecordEntity() when $default != null:
 return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.notes,_that.oil);case _:
   return null;
 
@@ -214,9 +214,9 @@ return $default(_that.title,_that.date,_that.km,_that.kind,_that.cost,_that.note
 /// @nodoc
 @JsonSerializable()
 
-class _ServiceRecord implements ServiceRecord {
-  const _ServiceRecord({required this.title, required this.date, required this.km, required this.kind, this.cost = 0, this.notes = '', this.oil = false});
-  factory _ServiceRecord.fromJson(Map<String, dynamic> json) => _$ServiceRecordFromJson(json);
+class _ServiceRecordEntity implements ServiceRecordEntity {
+  const _ServiceRecordEntity({required this.title, required this.date, required this.km, required this.kind, this.cost = 0, this.notes = '', this.oil = false});
+  factory _ServiceRecordEntity.fromJson(Map<String, dynamic> json) => _$ServiceRecordEntityFromJson(json);
 
 @override final  String title;
 @override final  DateTime date;
@@ -226,20 +226,20 @@ class _ServiceRecord implements ServiceRecord {
 @override@JsonKey() final  String notes;
 @override@JsonKey() final  bool oil;
 
-/// Create a copy of ServiceRecord
+/// Create a copy of ServiceRecordEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ServiceRecordCopyWith<_ServiceRecord> get copyWith => __$ServiceRecordCopyWithImpl<_ServiceRecord>(this, _$identity);
+_$ServiceRecordEntityCopyWith<_ServiceRecordEntity> get copyWith => __$ServiceRecordEntityCopyWithImpl<_ServiceRecordEntity>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$ServiceRecordToJson(this, );
+  return _$ServiceRecordEntityToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ServiceRecord&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.km, km) || other.km == km)&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.oil, oil) || other.oil == oil));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ServiceRecordEntity&&(identical(other.title, title) || other.title == title)&&(identical(other.date, date) || other.date == date)&&(identical(other.km, km) || other.km == km)&&(identical(other.kind, kind) || other.kind == kind)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.oil, oil) || other.oil == oil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -248,15 +248,15 @@ int get hashCode => Object.hash(runtimeType,title,date,km,kind,cost,notes,oil);
 
 @override
 String toString() {
-  return 'ServiceRecord(title: $title, date: $date, km: $km, kind: $kind, cost: $cost, notes: $notes, oil: $oil)';
+  return 'ServiceRecordEntity(title: $title, date: $date, km: $km, kind: $kind, cost: $cost, notes: $notes, oil: $oil)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ServiceRecordCopyWith<$Res> implements $ServiceRecordCopyWith<$Res> {
-  factory _$ServiceRecordCopyWith(_ServiceRecord value, $Res Function(_ServiceRecord) _then) = __$ServiceRecordCopyWithImpl;
+abstract mixin class _$ServiceRecordEntityCopyWith<$Res> implements $ServiceRecordEntityCopyWith<$Res> {
+  factory _$ServiceRecordEntityCopyWith(_ServiceRecordEntity value, $Res Function(_ServiceRecordEntity) _then) = __$ServiceRecordEntityCopyWithImpl;
 @override @useResult
 $Res call({
  String title, DateTime date, int km, ServiceKind kind, double cost, String notes, bool oil
@@ -267,17 +267,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$ServiceRecordCopyWithImpl<$Res>
-    implements _$ServiceRecordCopyWith<$Res> {
-  __$ServiceRecordCopyWithImpl(this._self, this._then);
+class __$ServiceRecordEntityCopyWithImpl<$Res>
+    implements _$ServiceRecordEntityCopyWith<$Res> {
+  __$ServiceRecordEntityCopyWithImpl(this._self, this._then);
 
-  final _ServiceRecord _self;
-  final $Res Function(_ServiceRecord) _then;
+  final _ServiceRecordEntity _self;
+  final $Res Function(_ServiceRecordEntity) _then;
 
-/// Create a copy of ServiceRecord
+/// Create a copy of ServiceRecordEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? date = null,Object? km = null,Object? kind = null,Object? cost = null,Object? notes = null,Object? oil = null,}) {
-  return _then(_ServiceRecord(
+  return _then(_ServiceRecordEntity(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,km: null == km ? _self.km : km // ignore: cast_nullable_to_non_nullable

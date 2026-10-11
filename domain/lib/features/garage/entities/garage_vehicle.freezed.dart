@@ -13,22 +13,22 @@ part of 'garage_vehicle.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$GarageVehicle {
+mixin _$GarageVehicleEntity {
 
- String get make; String get model; int get year; int get odometer; String get vin; String get body; String get fuel; String get engine; int get oilInterval; DateTime? get insuranceExpiry; List<ServiceRecord> get records;
-/// Create a copy of GarageVehicle
+ String get make; String get model; int get year; int get odometer; String get vin; String get body; String get fuel; String get engine; int get oilInterval; DateTime? get insuranceExpiry; List<ServiceRecordEntity> get records;
+/// Create a copy of GarageVehicleEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$GarageVehicleCopyWith<GarageVehicle> get copyWith => _$GarageVehicleCopyWithImpl<GarageVehicle>(this as GarageVehicle, _$identity);
+$GarageVehicleEntityCopyWith<GarageVehicleEntity> get copyWith => _$GarageVehicleEntityCopyWithImpl<GarageVehicleEntity>(this as GarageVehicleEntity, _$identity);
 
-  /// Serializes this GarageVehicle to a JSON map.
+  /// Serializes this GarageVehicleEntity to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GarageVehicle&&(identical(other.make, make) || other.make == make)&&(identical(other.model, model) || other.model == model)&&(identical(other.year, year) || other.year == year)&&(identical(other.odometer, odometer) || other.odometer == odometer)&&(identical(other.vin, vin) || other.vin == vin)&&(identical(other.body, body) || other.body == body)&&(identical(other.fuel, fuel) || other.fuel == fuel)&&(identical(other.engine, engine) || other.engine == engine)&&(identical(other.oilInterval, oilInterval) || other.oilInterval == oilInterval)&&(identical(other.insuranceExpiry, insuranceExpiry) || other.insuranceExpiry == insuranceExpiry)&&const DeepCollectionEquality().equals(other.records, records));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GarageVehicleEntity&&(identical(other.make, make) || other.make == make)&&(identical(other.model, model) || other.model == model)&&(identical(other.year, year) || other.year == year)&&(identical(other.odometer, odometer) || other.odometer == odometer)&&(identical(other.vin, vin) || other.vin == vin)&&(identical(other.body, body) || other.body == body)&&(identical(other.fuel, fuel) || other.fuel == fuel)&&(identical(other.engine, engine) || other.engine == engine)&&(identical(other.oilInterval, oilInterval) || other.oilInterval == oilInterval)&&(identical(other.insuranceExpiry, insuranceExpiry) || other.insuranceExpiry == insuranceExpiry)&&const DeepCollectionEquality().equals(other.records, records));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,18 +37,18 @@ int get hashCode => Object.hash(runtimeType,make,model,year,odometer,vin,body,fu
 
 @override
 String toString() {
-  return 'GarageVehicle(make: $make, model: $model, year: $year, odometer: $odometer, vin: $vin, body: $body, fuel: $fuel, engine: $engine, oilInterval: $oilInterval, insuranceExpiry: $insuranceExpiry, records: $records)';
+  return 'GarageVehicleEntity(make: $make, model: $model, year: $year, odometer: $odometer, vin: $vin, body: $body, fuel: $fuel, engine: $engine, oilInterval: $oilInterval, insuranceExpiry: $insuranceExpiry, records: $records)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $GarageVehicleCopyWith<$Res>  {
-  factory $GarageVehicleCopyWith(GarageVehicle value, $Res Function(GarageVehicle) _then) = _$GarageVehicleCopyWithImpl;
+abstract mixin class $GarageVehicleEntityCopyWith<$Res>  {
+  factory $GarageVehicleEntityCopyWith(GarageVehicleEntity value, $Res Function(GarageVehicleEntity) _then) = _$GarageVehicleEntityCopyWithImpl;
 @useResult
 $Res call({
- String make, String model, int year, int odometer, String vin, String body, String fuel, String engine, int oilInterval, DateTime? insuranceExpiry, List<ServiceRecord> records
+ String make, String model, int year, int odometer, String vin, String body, String fuel, String engine, int oilInterval, DateTime? insuranceExpiry, List<ServiceRecordEntity> records
 });
 
 
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$GarageVehicleCopyWithImpl<$Res>
-    implements $GarageVehicleCopyWith<$Res> {
-  _$GarageVehicleCopyWithImpl(this._self, this._then);
+class _$GarageVehicleEntityCopyWithImpl<$Res>
+    implements $GarageVehicleEntityCopyWith<$Res> {
+  _$GarageVehicleEntityCopyWithImpl(this._self, this._then);
 
-  final GarageVehicle _self;
-  final $Res Function(GarageVehicle) _then;
+  final GarageVehicleEntity _self;
+  final $Res Function(GarageVehicleEntity) _then;
 
-/// Create a copy of GarageVehicle
+/// Create a copy of GarageVehicleEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? make = null,Object? model = null,Object? year = null,Object? odometer = null,Object? vin = null,Object? body = null,Object? fuel = null,Object? engine = null,Object? oilInterval = null,Object? insuranceExpiry = freezed,Object? records = null,}) {
   return _then(_self.copyWith(
@@ -78,15 +78,15 @@ as String,engine: null == engine ? _self.engine : engine // ignore: cast_nullabl
 as String,oilInterval: null == oilInterval ? _self.oilInterval : oilInterval // ignore: cast_nullable_to_non_nullable
 as int,insuranceExpiry: freezed == insuranceExpiry ? _self.insuranceExpiry : insuranceExpiry // ignore: cast_nullable_to_non_nullable
 as DateTime?,records: null == records ? _self.records : records // ignore: cast_nullable_to_non_nullable
-as List<ServiceRecord>,
+as List<ServiceRecordEntity>,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [GarageVehicle].
-extension GarageVehiclePatterns on GarageVehicle {
+/// Adds pattern-matching-related methods to [GarageVehicleEntity].
+extension GarageVehicleEntityPatterns on GarageVehicleEntity {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -99,10 +99,10 @@ extension GarageVehiclePatterns on GarageVehicle {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GarageVehicle value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GarageVehicleEntity value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _GarageVehicle() when $default != null:
+case _GarageVehicleEntity() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -121,10 +121,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GarageVehicle value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GarageVehicleEntity value)  $default,){
 final _that = this;
 switch (_that) {
-case _GarageVehicle():
+case _GarageVehicleEntity():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -142,10 +142,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GarageVehicle value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GarageVehicleEntity value)?  $default,){
 final _that = this;
 switch (_that) {
-case _GarageVehicle() when $default != null:
+case _GarageVehicleEntity() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -163,9 +163,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecord> records)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecordEntity> records)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _GarageVehicle() when $default != null:
+case _GarageVehicleEntity() when $default != null:
 return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that.body,_that.fuel,_that.engine,_that.oilInterval,_that.insuranceExpiry,_that.records);case _:
   return orElse();
 
@@ -184,9 +184,9 @@ return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecord> records)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecordEntity> records)  $default,) {final _that = this;
 switch (_that) {
-case _GarageVehicle():
+case _GarageVehicleEntity():
 return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that.body,_that.fuel,_that.engine,_that.oilInterval,_that.insuranceExpiry,_that.records);case _:
   throw StateError('Unexpected subclass');
 
@@ -204,9 +204,9 @@ return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecord> records)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String make,  String model,  int year,  int odometer,  String vin,  String body,  String fuel,  String engine,  int oilInterval,  DateTime? insuranceExpiry,  List<ServiceRecordEntity> records)?  $default,) {final _that = this;
 switch (_that) {
-case _GarageVehicle() when $default != null:
+case _GarageVehicleEntity() when $default != null:
 return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that.body,_that.fuel,_that.engine,_that.oilInterval,_that.insuranceExpiry,_that.records);case _:
   return null;
 
@@ -218,9 +218,9 @@ return $default(_that.make,_that.model,_that.year,_that.odometer,_that.vin,_that
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _GarageVehicle extends GarageVehicle {
-  const _GarageVehicle({required this.make, required this.model, required this.year, required this.odometer, this.vin = '', this.body = '', this.fuel = '', this.engine = '', this.oilInterval = 10000, this.insuranceExpiry, final  List<ServiceRecord> records = const []}): _records = records,super._();
-  factory _GarageVehicle.fromJson(Map<String, dynamic> json) => _$GarageVehicleFromJson(json);
+class _GarageVehicleEntity extends GarageVehicleEntity {
+  const _GarageVehicleEntity({required this.make, required this.model, required this.year, required this.odometer, this.vin = '', this.body = '', this.fuel = '', this.engine = '', this.oilInterval = 10000, this.insuranceExpiry, final  List<ServiceRecordEntity> records = const []}): _records = records,super._();
+  factory _GarageVehicleEntity.fromJson(Map<String, dynamic> json) => _$GarageVehicleEntityFromJson(json);
 
 @override final  String make;
 @override final  String model;
@@ -232,28 +232,28 @@ class _GarageVehicle extends GarageVehicle {
 @override@JsonKey() final  String engine;
 @override@JsonKey() final  int oilInterval;
 @override final  DateTime? insuranceExpiry;
- final  List<ServiceRecord> _records;
-@override@JsonKey() List<ServiceRecord> get records {
+ final  List<ServiceRecordEntity> _records;
+@override@JsonKey() List<ServiceRecordEntity> get records {
   if (_records is EqualUnmodifiableListView) return _records;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_records);
 }
 
 
-/// Create a copy of GarageVehicle
+/// Create a copy of GarageVehicleEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$GarageVehicleCopyWith<_GarageVehicle> get copyWith => __$GarageVehicleCopyWithImpl<_GarageVehicle>(this, _$identity);
+_$GarageVehicleEntityCopyWith<_GarageVehicleEntity> get copyWith => __$GarageVehicleEntityCopyWithImpl<_GarageVehicleEntity>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$GarageVehicleToJson(this, );
+  return _$GarageVehicleEntityToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GarageVehicle&&(identical(other.make, make) || other.make == make)&&(identical(other.model, model) || other.model == model)&&(identical(other.year, year) || other.year == year)&&(identical(other.odometer, odometer) || other.odometer == odometer)&&(identical(other.vin, vin) || other.vin == vin)&&(identical(other.body, body) || other.body == body)&&(identical(other.fuel, fuel) || other.fuel == fuel)&&(identical(other.engine, engine) || other.engine == engine)&&(identical(other.oilInterval, oilInterval) || other.oilInterval == oilInterval)&&(identical(other.insuranceExpiry, insuranceExpiry) || other.insuranceExpiry == insuranceExpiry)&&const DeepCollectionEquality().equals(other._records, _records));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GarageVehicleEntity&&(identical(other.make, make) || other.make == make)&&(identical(other.model, model) || other.model == model)&&(identical(other.year, year) || other.year == year)&&(identical(other.odometer, odometer) || other.odometer == odometer)&&(identical(other.vin, vin) || other.vin == vin)&&(identical(other.body, body) || other.body == body)&&(identical(other.fuel, fuel) || other.fuel == fuel)&&(identical(other.engine, engine) || other.engine == engine)&&(identical(other.oilInterval, oilInterval) || other.oilInterval == oilInterval)&&(identical(other.insuranceExpiry, insuranceExpiry) || other.insuranceExpiry == insuranceExpiry)&&const DeepCollectionEquality().equals(other._records, _records));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -262,18 +262,18 @@ int get hashCode => Object.hash(runtimeType,make,model,year,odometer,vin,body,fu
 
 @override
 String toString() {
-  return 'GarageVehicle(make: $make, model: $model, year: $year, odometer: $odometer, vin: $vin, body: $body, fuel: $fuel, engine: $engine, oilInterval: $oilInterval, insuranceExpiry: $insuranceExpiry, records: $records)';
+  return 'GarageVehicleEntity(make: $make, model: $model, year: $year, odometer: $odometer, vin: $vin, body: $body, fuel: $fuel, engine: $engine, oilInterval: $oilInterval, insuranceExpiry: $insuranceExpiry, records: $records)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$GarageVehicleCopyWith<$Res> implements $GarageVehicleCopyWith<$Res> {
-  factory _$GarageVehicleCopyWith(_GarageVehicle value, $Res Function(_GarageVehicle) _then) = __$GarageVehicleCopyWithImpl;
+abstract mixin class _$GarageVehicleEntityCopyWith<$Res> implements $GarageVehicleEntityCopyWith<$Res> {
+  factory _$GarageVehicleEntityCopyWith(_GarageVehicleEntity value, $Res Function(_GarageVehicleEntity) _then) = __$GarageVehicleEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String make, String model, int year, int odometer, String vin, String body, String fuel, String engine, int oilInterval, DateTime? insuranceExpiry, List<ServiceRecord> records
+ String make, String model, int year, int odometer, String vin, String body, String fuel, String engine, int oilInterval, DateTime? insuranceExpiry, List<ServiceRecordEntity> records
 });
 
 
@@ -281,17 +281,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$GarageVehicleCopyWithImpl<$Res>
-    implements _$GarageVehicleCopyWith<$Res> {
-  __$GarageVehicleCopyWithImpl(this._self, this._then);
+class __$GarageVehicleEntityCopyWithImpl<$Res>
+    implements _$GarageVehicleEntityCopyWith<$Res> {
+  __$GarageVehicleEntityCopyWithImpl(this._self, this._then);
 
-  final _GarageVehicle _self;
-  final $Res Function(_GarageVehicle) _then;
+  final _GarageVehicleEntity _self;
+  final $Res Function(_GarageVehicleEntity) _then;
 
-/// Create a copy of GarageVehicle
+/// Create a copy of GarageVehicleEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? make = null,Object? model = null,Object? year = null,Object? odometer = null,Object? vin = null,Object? body = null,Object? fuel = null,Object? engine = null,Object? oilInterval = null,Object? insuranceExpiry = freezed,Object? records = null,}) {
-  return _then(_GarageVehicle(
+  return _then(_GarageVehicleEntity(
 make: null == make ? _self.make : make // ignore: cast_nullable_to_non_nullable
 as String,model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
 as String,year: null == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
@@ -303,7 +303,7 @@ as String,engine: null == engine ? _self.engine : engine // ignore: cast_nullabl
 as String,oilInterval: null == oilInterval ? _self.oilInterval : oilInterval // ignore: cast_nullable_to_non_nullable
 as int,insuranceExpiry: freezed == insuranceExpiry ? _self.insuranceExpiry : insuranceExpiry // ignore: cast_nullable_to_non_nullable
 as DateTime?,records: null == records ? _self._records : records // ignore: cast_nullable_to_non_nullable
-as List<ServiceRecord>,
+as List<ServiceRecordEntity>,
   ));
 }
 

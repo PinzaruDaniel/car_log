@@ -23,18 +23,12 @@ Future<VehicleOnboardingController> mountSetup(
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
-  final controller = fixtures.onboardingController(
-    repository ?? fixtures.MemoryGarage(),
-  );
+  final controller = fixtures.onboardingController(repository ?? fixtures.MemoryGarage());
   controller.details.value = details;
   controller.fields['make']!.text = 'BMW';
   controller.fields['model']!.text = 'E39';
   controller.fields['year']!.text = '2002';
-  await tester.pumpWidget(
-    fixtures.app(
-      VehicleOnboardingPage(controller: controller, onSaved: (_) {}),
-    ),
-  );
+  await tester.pumpWidget(fixtures.app(VehicleOnboardingPage(controller: controller, onSaved: (_) {})));
   await tester.pumpAndSettle();
   return controller;
 }
@@ -58,9 +52,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(fixtures.initializeTestLocalization);
 
-  testWidgets('rapid forward/back retains one mounted form per controller', (
-    tester,
-  ) async {
+  testWidgets('rapid forward/back retains one mounted form per controller', (tester) async {
     final controller = await mountSetup(tester);
     final car = formState(tester, controller.carForm);
     final service = formState(tester, controller.serviceForm);
@@ -81,18 +73,11 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('status/warning insertion and removal never remount forms', (
-    tester,
-  ) async {
+  testWidgets('status/warning insertion and removal never remount forms', (tester) async {
     final controller = await mountSetup(tester);
     final car = formState(tester, controller.carForm);
     final service = formState(tester, controller.serviceForm);
-    for (final message in [
-      LocaleKeys.manual_message,
-      LocaleKeys.vin_found_details,
-      LocaleKeys.vin_unavailable,
-      null,
-    ]) {
+    for (final message in [LocaleKeys.manual_message, LocaleKeys.vin_found_details, LocaleKeys.vin_unavailable, null]) {
       controller.message.value = message;
       controller.hasVinWarning.value = !controller.hasVinWarning.value;
       await tester.pumpAndSettle();
@@ -101,11 +86,8 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('VIN retries and manual fallback keep existing forms attached', (
-    tester,
-  ) async {
-    final repository = fixtures.MemoryGarage()
-      ..decoded = {'make': 'BMW', 'model': '530i', '_warning': 'vin_warning'};
+  testWidgets('VIN retries and manual fallback keep existing forms attached', (tester) async {
+    final repository = fixtures.MemoryGarage()..decoded = {'make': 'BMW', 'model': '530i', '_warning': 'vin_warning'};
     final controller = await mountSetup(tester, repository: repository);
     final car = formState(tester, controller.carForm);
     final service = formState(tester, controller.serviceForm);
@@ -132,36 +114,18 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('validation stays scoped; back clears hidden field focus', (
-    tester,
-  ) async {
+  testWidgets('validation stays scoped; back clears hidden field focus', (tester) async {
     final controller = await mountSetup(tester);
-    expect(
-      (await controller.carForm.validate(
-        scrollToError: false,
-        focusFirstError: false,
-      )).isValid,
-      true,
-    );
-    expect(
-      (await controller.serviceForm.validate(
-        scrollToError: false,
-        focusFirstError: false,
-      )).isValid,
-      false,
-    );
+    expect((await controller.carForm.validate(scrollToError: false, focusFirstError: false)).isValid, true);
+    expect((await controller.serviceForm.validate(scrollToError: false, focusFirstError: false)).isValid, false);
     await controller.next(tester.element(find.byType(VehicleOnboardingPage)));
     await tester.pumpAndSettle();
     expect(find.text('Meet your car.'), findsNothing);
     expect(find.text('Know where you stand.'), findsOneWidget);
     await fixtures.enterField(tester, 'odometer', '287450');
-    final odometer = find.byWidgetPredicate(
-      (widget) => widget is SmartTextField && widget.name == 'odometer',
-    );
+    final odometer = find.byWidgetPredicate((widget) => widget is SmartTextField && widget.name == 'odometer');
     final focus = tester
-        .widget<EditableText>(
-          find.descendant(of: odometer, matching: find.byType(EditableText)),
-        )
+        .widget<EditableText>(find.descendant(of: odometer, matching: find.byType(EditableText)))
         .focusNode;
     expect(focus.hasFocus, true);
     controller.goBack();
@@ -173,9 +137,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('details reveal/hide preserves form; disposal permits reattach', (
-    tester,
-  ) async {
+  testWidgets('details reveal/hide preserves form; disposal permits reattach', (tester) async {
     final controller = await mountSetup(tester, details: false);
     final car = formState(tester, controller.carForm);
     final service = formState(tester, controller.serviceForm);
@@ -187,11 +149,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     expect(controller.carForm.isAttached, false);
     expect(controller.serviceForm.isAttached, false);
-    await tester.pumpWidget(
-      fixtures.app(
-        VehicleOnboardingPage(controller: controller, onSaved: (_) {}),
-      ),
-    );
+    await tester.pumpWidget(fixtures.app(VehicleOnboardingPage(controller: controller, onSaved: (_) {})));
     await tester.pumpAndSettle();
     expect(formFor(controller.carForm), findsOneWidget);
     expect(formFor(controller.serviceForm), findsOneWidget);
@@ -200,15 +158,11 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('locale change retains active and hidden form state', (
-    tester,
-  ) async {
+  testWidgets('locale change retains active and hidden form state', (tester) async {
     final controller = await mountSetup(tester);
     final car = formState(tester, controller.carForm);
     final service = formState(tester, controller.serviceForm);
-    await tester
-        .element(find.byType(VehicleOnboardingPage))
-        .setLocale(const Locale('ro'));
+    await tester.element(find.byType(VehicleOnboardingPage)).setLocale(const Locale('ro'));
     await tester.pumpAndSettle();
     expectStableForms(tester, controller, car, service);
     expect(controller.fields['model']!.text, 'E39');

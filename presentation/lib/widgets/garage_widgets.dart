@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:domain/features/garage/entities/service_record.dart';
 import '../localization/localization.dart';
 import 'package:flutter_mesh_gradients/flutter_mesh_gradients.dart';
 import 'motion_surface.dart';
@@ -8,26 +7,9 @@ import '../utils/app_colors.dart';
 String kilometres(int value) => NumberFormat.decimalPattern().format(value);
 String displayDate(DateTime value) => DateFormat('d MMM y').format(value);
 String displayMonth(DateTime value) => DateFormat('MMMM y').format(value);
-String distance(int value) =>
-    LocaleKeys.km.tr(namedArgs: {'value': kilometres(value)});
-String money(num value, {int decimals = 2}) => LocaleKeys.money.tr(
-  namedArgs: {
-    'value': NumberFormat.decimalPatternDigits(
-      decimalDigits: decimals,
-    ).format(value),
-  },
-);
-String categoryLabel(ServiceKind? kind) => switch (kind) {
-  null => LocaleKeys.all.tr(),
-  ServiceKind.maintenance => LocaleKeys.maintenance.tr(),
-  ServiceKind.repair => LocaleKeys.repairs.tr(),
-  ServiceKind.fuel => LocaleKeys.fuel.tr(),
-};
-// Translate app-generated values only; never reinterpret users' titles/notes.
-String recordTitle(ServiceRecord record) =>
-    record.title == LocaleKeys.oil_filters_service
-    ? LocaleKeys.oil_filters_service.tr()
-    : record.title;
+String distance(int value) => LocaleKeys.km.tr(namedArgs: {'value': kilometres(value)});
+String money(num value, {int decimals = 2}) =>
+    LocaleKeys.money.tr(namedArgs: {'value': NumberFormat.decimalPatternDigits(decimalDigits: decimals).format(value)});
 String filterLabel(String value) =>
     const [
       LocaleKeys.oil_filter,
@@ -37,9 +19,6 @@ String filterLabel(String value) =>
     ].contains(value)
     ? value.tr()
     : value;
-String recordNotes(ServiceRecord record) => record.oil
-    ? record.notes.split(' · ').map(filterLabel).join(' · ')
-    : record.notes;
 
 class GarageCard extends StatelessWidget {
   const GarageCard({required this.child, this.highlight = false, super.key});
@@ -55,9 +34,7 @@ class GarageCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: highlight
-              ? AppColors.primaryAmber.withValues(alpha: .5)
-              : Colors.white.withValues(alpha: .13),
+          color: highlight ? AppColors.primaryAmber.withValues(alpha: .5) : Colors.white.withValues(alpha: .13),
         ),
       ),
       child: child,
@@ -102,20 +79,10 @@ class SectionTitle extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -.6,
-          ),
-        ),
+        Text(title, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -.6)),
         if (subtitle != null) ...[
           const SizedBox(height: 8),
-          Text(
-            subtitle!,
-            style: const TextStyle(color: Colors.white60, height: 1.5),
-          ),
+          Text(subtitle!, style: const TextStyle(color: Colors.white60, height: 1.5)),
         ],
       ],
     ),
