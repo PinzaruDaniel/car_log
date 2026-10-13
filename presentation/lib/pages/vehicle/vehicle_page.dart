@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/base/imports/controller_imports.dart';
 import '../../localization/localization.dart';
 import '../../page+state/base_state.dart';
@@ -159,36 +158,34 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
         ),
       ),
       SizedBox(height: 18),
-      Wrap(
-        spacing: 10,
-        runSpacing: 10,
-        children: [
-          _action(
-            LocaleKeys.log_service.tr(),
-            Icons.build_rounded,
-            () => mainAppController.addRecord(context, ServiceKindViewModel.maintenance),
-            _actionWidth,
-          ),
-          _action(
-            LocaleKeys.add_fuel.tr(),
-            Icons.local_gas_station_rounded,
-            () => mainAppController.addRecord(context, ServiceKindViewModel.fuel),
-            _actionWidth,
-          ),
-          _action(
-            LocaleKeys.odometer_action.tr(),
-            Icons.speed_rounded,
-            () => mainAppController.updateOdometer(context),
-            _actionWidth,
-          ),
-        ],
+      IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 10,
+          children: [
+            _action(
+              LocaleKeys.log_service.tr(),
+              Icons.build_rounded,
+              () => mainAppController.addRecord(context, ServiceKindViewModel.maintenance),
+            ),
+            _action(
+              LocaleKeys.add_fuel.tr(),
+              Icons.local_gas_station_rounded,
+              () => mainAppController.addRecord(context, ServiceKindViewModel.fuel),
+            ),
+            _action(
+              LocaleKeys.odometer_action.tr(),
+              Icons.speed_rounded,
+              () => mainAppController.updateOdometer(context),
+            ),
+          ],
+        ),
       ),
+      SizedBox(height: 80),
     ];
   }
 
   Widget _badge(String text, Color color) => GarageBadge(text, color: color);
-
-  double get _actionWidth => ((1.sw > 650 ? 650.0 : 1.sw) - 64) / 3;
 
   Widget _detail(String label, String value) => Padding(
     padding: EdgeInsets.only(bottom: 7),
@@ -206,8 +203,7 @@ class _VehiclePageState extends BaseState<VehiclePage, VehicleController> {
     ),
   );
 
-  Widget _action(String label, IconData icon, VoidCallback action, double width) => SizedBox(
-    width: width,
+  Widget _action(String label, IconData icon, VoidCallback action) => Expanded(
     child: VehicleActionTile(label: label, icon: icon, onPressed: _saving ? null : action),
   );
 }

@@ -6,7 +6,6 @@ import '../localization/localization.dart';
 import '../utils/app_colors.dart';
 import '../widgets/garage_widgets.dart';
 import '../widgets/localized_obx.dart';
-import '../widgets/motion_surface.dart';
 import 'analytics/analytics_page.dart';
 import 'settings/settings_page.dart';
 import 'timeline/timeline_page.dart';
@@ -42,56 +41,54 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return LocalizedObx(
       () => Scaffold(
-        body: GarageBackdrop(
-          child: SafeArea(
-            bottom: false,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 650),
+        body: Stack(
+          children: [
+            GarageBackdrop(
+              child: SafeArea(
+                bottom: false,
                 child: IndexedStack(
                   index: _currentIndex,
                   children: [for (var index = 0; index < _tabs.length; index++) _buildTab(index, _tabs[index])],
                 ),
               ),
             ),
-          ),
-        ),
-        bottomNavigationBar: SafeArea(
-          top: false,
-          minimum: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-          child: MotionSurface(
-            radius: 28,
-            child: LiquidGlassNavBar(
-              activeColor: AppColors.primaryAmber,
-              inactiveColor: Colors.white54,
-              indicatorColor: AppColors.primaryAmber.withValues(alpha: .14),
-              currentIndex: _currentIndex,
-              onTap: _onTabSelected,
-              items: [
-                LiquidGlassNavItem(
-                  icon: const Icon(Icons.directions_car_outlined),
-                  label: LocaleKeys.garage.tr(),
-                  iosSystemImage: 'car',
-                  iosSelectedSystemImage: 'car.fill',
+            Align(
+              alignment: .bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: LiquidGlassNavBar(
+                  activeColor: AppColors.primaryAmber,
+                  inactiveColor: Colors.white54,
+                  indicatorColor: AppColors.primaryAmber.withValues(alpha: .14),
+                  currentIndex: _currentIndex,
+                  onTap: _onTabSelected,
+                  items: [
+                    LiquidGlassNavItem(
+                      icon: const Icon(Icons.directions_car_outlined),
+                      label: LocaleKeys.garage.tr(),
+                      iosSystemImage: 'car',
+                      iosSelectedSystemImage: 'car.fill',
+                    ),
+                    LiquidGlassNavItem(
+                      icon: const Icon(Icons.format_list_bulleted),
+                      label: LocaleKeys.timeline.tr(),
+                      iosSystemImage: 'list.bullet',
+                    ),
+                    LiquidGlassNavItem(
+                      icon: const Icon(Icons.bar_chart_rounded),
+                      label: LocaleKeys.analytics.tr(),
+                      iosSystemImage: 'chart.bar',
+                    ),
+                    LiquidGlassNavItem(
+                      icon: const Icon(Icons.settings_outlined),
+                      label: LocaleKeys.settings.tr(),
+                      iosSystemImage: 'gearshape',
+                    ),
+                  ],
                 ),
-                LiquidGlassNavItem(
-                  icon: const Icon(Icons.format_list_bulleted),
-                  label: LocaleKeys.timeline.tr(),
-                  iosSystemImage: 'list.bullet',
-                ),
-                LiquidGlassNavItem(
-                  icon: const Icon(Icons.bar_chart_rounded),
-                  label: LocaleKeys.analytics.tr(),
-                  iosSystemImage: 'chart.bar',
-                ),
-                LiquidGlassNavItem(
-                  icon: const Icon(Icons.settings_outlined),
-                  label: LocaleKeys.settings.tr(),
-                  iosSystemImage: 'gearshape',
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
